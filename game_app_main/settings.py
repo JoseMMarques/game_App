@@ -36,6 +36,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # my apps
+    'apps.accounts',
+
+    # other apps
 ]
 
 MIDDLEWARE = [
@@ -80,6 +85,8 @@ DATABASES = {
         'HOST': config('DB_HOST'),
     }
 }
+
+AUTH_USER_MODEL = 'apps.accounts.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
