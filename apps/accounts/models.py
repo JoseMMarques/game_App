@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from datetime import date
 
 
@@ -31,17 +31,18 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
 
     class Types(models.TextChoices):
-        ALUNO = "ALUNO", "Aluno"
-        PROFESSOR = "PROFESSOR", "Professor"
+        TEACHER = "TEACHER", "Professor"
+        STUDENT = "STUDENT", "Estudante"
+        EMPLOYEE = "EMPLOYEE", "Funcionário"
 
     type = models.CharField(
         'Tipo',
         max_length=50,
         choices=Types.choices,
-        default=Types.PROFESSOR
+        default=Types.TEACHER
     )
 
     name = models.CharField(
@@ -103,6 +104,9 @@ class User(AbstractBaseUser):
     is_superadmin = models.BooleanField(
         default=False
     )
+    is_game = models.BooleanField(
+        default=False
+    )
 
     class Meta:
         """options (metadata) to the field"""
@@ -128,7 +132,7 @@ class User(AbstractBaseUser):
 
     def get_last_name(self):
         """get the user last name"""
-        return str(self).spit(" ")[-1]
+        return str(self).split(" ")[-1]
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
@@ -142,11 +146,40 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
 
-class Professor(User):
-    class Meta:
-        proxy = True
+class TeacherManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(type=User.Types.TEACHER)
 
 
-class Aluno(User):
+class StudentManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(type=User.Types.STUDENT)
+
+
+class EmployeeManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(type=User.Types.EMPLOYEE)
+
+
+class Teacher(User):
+    objects = TeacherManager()
+
     class Meta:
         proxy = True
+        ordering = ('name',)
+
+
+class Student(User):
+    objects = StudentManager()
+
+    class Meta:
+        proxy = True
+        ordering = ('name',)
+
+
+class Employee(User):
+    objects = EmployeeManager()
+
+    class Meta:
+        proxy = True
+        ordering = ('name',)
