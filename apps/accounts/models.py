@@ -166,6 +166,8 @@ class Teacher(User):
 
     class Meta:
         proxy = True
+        verbose_name = "Professor"
+        verbose_name_plural = "Professores"
         ordering = ('name',)
 
 
@@ -174,6 +176,8 @@ class Student(User):
 
     class Meta:
         proxy = True
+        verbose_name = "Aluno"
+        verbose_name_plural = "Alunos"
         ordering = ('name',)
 
 
@@ -182,4 +186,6 @@ class Employee(User):
 
     class Meta:
         proxy = True
+        verbose_name = "Funcionário"
+        verbose_name_plural = "Funcionários"
         ordering = ('name',)

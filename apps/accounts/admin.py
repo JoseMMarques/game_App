@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User
+from .models import User, Teacher, Student, Employee
 from .forms import UserAdminCreationForm, UserAdminForm
 
 
@@ -49,5 +49,27 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(User, UserAdmin)
+
+
+class TeacherAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Teacher, TeacherAdmin)
+
+
+class StudentAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Student, StudentAdmin)
+
+
+class EmployeeAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Employee, EmployeeAdmin)
+
 
 # Register your models here.
