@@ -84,27 +84,35 @@ class User(AbstractBaseUser, PermissionsMixin):
         auto_now_add=True
     )
     last_login = models.DateTimeField(
+        'Último login',
         auto_now_add=True
     )
     created = models.DateTimeField(
+        'Criado em',
         auto_now_add=True
     )
     modified = models.DateTimeField(
+        'modificado em',
         auto_now=True
     )
     is_admin = models.BooleanField(
+        'Administrador',
         default=False
     )
     is_staff = models.BooleanField(
+        'Staff',
         default=False
     )
     is_active = models.BooleanField(
+        'Conta ativa',
         default=False
     )
     is_superadmin = models.BooleanField(
+        'Super Administrador',
         default=False
     )
     is_game = models.BooleanField(
+        'Membro GAME',
         default=False
     )
 
