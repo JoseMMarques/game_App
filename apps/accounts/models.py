@@ -36,34 +36,212 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    username = models.CharField(max_length=50, unique=True)
-    email = models.EmailField(max_length=150, unique=True)
-    phone_number = models.CharField(max_length=12, blank=True)
+class User(AbstractBaseUser, PermissionsMixin):
+
+    class Types(models.TextChoices):
+        TEACHER = "TEACHER", "Professor"
+        STUDENT = "STUDENT", "Estudante"
+        EMPLOYEE = "EMPLOYEE", "Funcionário"
+
+    type = models.CharField(
+        'Tipo',
+        max_length=50,
+        choices=Types.choices,
+        default=Types.TEACHER
+    )
+
+    name = models.CharField(
+        'Nome',
+        max_length=254,
+    )
+    birth_date = models.DateField(
+        'Data de nascimento',
+        blank=True,
+        null=True,
+    )
+    SEX_CHOICES = (
+        ('M', 'Masculino'),
+        ('F', 'Feminino'),
+    )
+    sex = models.CharField(
+        'Sexo',
+        choices=SEX_CHOICES,
+        max_length=100,
+        default='F',
+    )
+    email = models.EmailField(
+        'e-mail',
+        max_length=254,
+        unique=True,
+    )
+    phone_number = models.CharField(
+        'Telemóvel',
+        max_length=12,
+        blank=True,
+    )
+    address = models.TextField(
+        'Morada',
+        blank=True,
+    )
 
     # required fields
-    date_joined = models.DateTimeField(auto_now_add=True)
-    last_login = models.DateTimeField(auto_now_add=True)
-    created_date = models.DateTimeField(auto_now_add=True)
-    modified_date = models.DateTimeField(auto_now=True)
-    is_admin = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
-    is_superadmin = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(
+        auto_now_add=True
+    )
+    last_login = models.DateTimeField(
+        'Último login',
+        auto_now_add=True
+    )
+    created = models.DateTimeField(
+        'Criado em',
+        auto_now_add=True
+    )
+    modified = models.DateTimeField(
+        'modificado em',
+        auto_now=True
+    )
+    is_admin = models.BooleanField(
+        'Administrador',
+        default=False
+    )
+    is_staff = models.BooleanField(
+        'Staff',
+        default=False
+    )
+    is_active = models.BooleanField(
+        'Conta ativa',
+        default=False
+    )
+    is_superadmin = models.BooleanField(
+        'Super Administrador',
+        default=False
+    )
+    is_game = models.BooleanField(
+        'Membro GAME',
+        default=False
+    )
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+    class Meta:
+        """options (metadata) to the field"""
+        verbose_name = "Utilizador"
+        verbose_name_plural = "Utilizadores"
+        ordering = ['name']
 
-    objects = UserManager()
+    def get_age(self):
+        """return the age of the user from the birth_date"""
+        today = date.today()
+        if self.birth_date:
+            return today.year - self.birth_date.year - (
+                    (today.month, today.day) < (self.birth_date.month, self.birth_date.day)
+            )
 
     def __str__(self):
-        return self.email
+        """Return the str.name fom the object"""
+        return self.name
+
+    def get_first_name(self):
+        """Get the user first name"""
+        return str(self).split(" ")[0]
+
+    def get_last_name(self):
+        """get the user last name"""
+        return str(self).split(" ")[-1]
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name']
 
     def has_perm(self, perm, obj=None):
         return self.is_admin
 
     def has_module_perms(self, app_label):
         return True
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.type = self.base_type
+        return super().save(*args, **kwargs)
+
+    objects = UserManager()
+
+
+class TeacherManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(type=User.Types.TEACHER)
+
+
+class StudentManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(type=User.Types.STUDENT)
+
+
+class EmployeeManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(type=User.Types.EMPLOYEE)
+
+
+class Teacher(User):
+    base_type = User.Types.TEACHER
+    objects = TeacherManager()
+
+    @property
+    def more(self):
+        return self.teachermore
+
+    class Meta:
+        proxy = True
+        verbose_name = "Professor"
+        verbose_name_plural = "Professores"
+        ordering = ('name',)
+
+
+class Student(User):
+    base_type = User.Types.STUDENT
+    objects = StudentManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = "Aluno"
+        verbose_name_plural = "Alunos"
+        ordering = ('name',)
+
+
+class SchoolClass(models.Model):
+    """Modelo para as turmas"""
+
+    name = models.CharField(
+        'Designação da turma',
+        max_length=20,
+    )
+    school_year = models.CharField(
+        'Ano Letivo',
+        max_length=20,
+    )
+    school = models.CharField(
+        'Escola',
+        max_length=20,
+    )
+    teacher_dt = models.OneToOneField(
+        Teacher,
+        on_delete=models.CASCADE,
+    )
+    created = models.DateTimeField(
+        'Criado em',
+        auto_now_add=True
+    )
+    modified = models.DateTimeField(
+        'modificado em',
+        auto_now=True
+    )
+
+    def __str__(self):
+        """Return the str.name fom the object"""
+        return self.name
+
+    class Meta:
+        verbose_name = "Turma"
+        verbose_name_plural = "Turmas"
+        ordering = ('name',)
+
+
+
 
