@@ -151,6 +151,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     def has_module_perms(self, app_label):
         return True
 
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.type = self.base_type
+        return super().save(*args, **kwargs)
+
     objects = UserManager()
 
 
@@ -170,7 +175,12 @@ class EmployeeManager(models.Manager):
 
 
 class Teacher(User):
+    base_type = User.Types.TEACHER
     objects = TeacherManager()
+
+    @property
+    def more(self):
+        return self.drivermore
 
     class Meta:
         proxy = True
@@ -180,6 +190,7 @@ class Teacher(User):
 
 
 class Student(User):
+    base_type = User.Types.STUDENT
     objects = StudentManager()
 
     class Meta:
@@ -190,6 +201,7 @@ class Student(User):
 
 
 class Employee(User):
+    base_type = User.Types.EMPLOYEE
     objects = EmployeeManager()
 
     class Meta:
@@ -197,3 +209,73 @@ class Employee(User):
         verbose_name = "Funcionário"
         verbose_name_plural = "Funcionários"
         ordering = ('name',)
+
+
+class SchoolClass(models.Model):
+    """Modelo para as turmas"""
+
+    name = models.CharField(
+        'Designação da turma',
+        max_length=20,
+    )
+    school_year = models.CharField(
+        'Ano Letivo',
+        max_length=20,
+    )
+    school = models.CharField(
+        'Escola',
+        max_length=20,
+    )
+    teacher_dt = models.OneToOneField(
+        Teacher,
+        on_delete=models.CASCADE,
+    )
+    created = models.DateTimeField(
+        'Criado em',
+        auto_now_add=True
+    )
+    modified = models.DateTimeField(
+        'modificado em',
+        auto_now=True
+    )
+
+    def __str__(self):
+        """Return the str.name fom the object"""
+        return self.name
+
+    class Meta:
+        verbose_name = "Turma"
+        verbose_name_plural = "Turmas"
+        ordering = ('name',)
+
+
+class TeacherMore(models.Model):
+    user = models.OneToOneField(
+        Teacher,
+        on_delete=models.CASCADE
+    )
+    school_class_dt = models.OneToOneField(
+        SchoolClass,
+        verbose_name='Direção de Turma',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    subjects = models.CharField(
+        'Disciplinas',
+        max_length=200,
+    )
+    is_dt = models.BooleanField(
+        'DT',
+        default=False
+    )
+
+    def __str__(self):
+        """Return the str.name fom the object"""
+        return self.user.name
+
+    class Meta:
+        verbose_name = "Professor"
+        verbose_name_plural = "Professores"
+        ordering = ('user',)
+
