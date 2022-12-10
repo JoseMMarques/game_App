@@ -47,8 +47,8 @@ class SchoolYear(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Ano Letivo',
-        verbose_name_plural = 'Anos Letivos',
+        verbose_name = 'Ano Letivo'
+        verbose_name_plural = 'Anos Letivos'
         ordering = ['name']
 
     def __str__(self):
@@ -80,11 +80,10 @@ class School(models.Model):
         message=code_message
     )
     code = models.CharField(
-        'Código da Escola',
+        'Código de Agrupamento',
         validators=[code_regex],
         max_length=10,
         blank=True,
-        unique=True,
         help_text='Introduza um código com 6 dígitos.'
     )
     slug = models.SlugField(
@@ -98,19 +97,27 @@ class School(models.Model):
         blank=True,
     )
     phone1 = models.CharField(
-        'Telefone1',
+        'Telefone 1',
         max_length=12,
         blank=True,
     )
     phone2 = models.CharField(
-        'Telefone2',
+        'Telefone 2',
         max_length=12,
         blank=True,
     )
-    nif = models.PositiveIntegerField(
+    nif_message = 'o NIF deve ter 9 dígitos.'
+    nif_regex = RegexValidator(
+        regex=r'\d{9}$',
+        message=nif_message
+    )
+    nif = models.CharField(
         'NIF',
+        validators=[nif_regex],
         max_length=10,
         blank=True,
+
+        help_text='Introduza um NIF com 9 dígitos.'
     )
     email = models.EmailField(
         'email',

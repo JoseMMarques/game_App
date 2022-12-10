@@ -45,7 +45,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         choices=TYPE_CHOICES,
         default='TEACHER'
     )
-
     name = models.CharField(
         'Nome',
         max_length=254,
@@ -65,6 +64,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=100,
         default='F',
     )
+    internal_number = models.CharField(
+        'Número interno',
+        max_length=15,
+        unique=True,
+        blank=True,
+    )
     email = models.EmailField(
         'e-mail',
         max_length=254,
@@ -79,7 +84,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         'Morada',
         blank=True,
     )
-
     # required fields
     last_login = models.DateTimeField(
         'Último acesso',
@@ -123,6 +127,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """Return the str.name fom the object"""
         return self.name
+
     def get_age(self):
         """return the age of the user from the birth_date"""
         today = date.today()
@@ -139,9 +144,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         """get the user last name"""
         return str(self).split(" ")[-1]
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
-
     def has_perm(self, perm, obj=None):
         return self.is_admin
 
@@ -149,6 +151,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         return True
 
     objects = UserManager()
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name']
 
 
 class Teacher(models.Model):
@@ -221,7 +225,7 @@ class Student(models.Model):
     class Meta:
         verbose_name = "Aluno"
         verbose_name_plural = "Alunos"
-        ordering = ('name',)
+        ordering = ('user',)
 
     def __str__(self):
         """Return the str.name fom the object"""
@@ -250,7 +254,7 @@ class Employee(models.Model):
     class Meta:
         verbose_name = "Aluno"
         verbose_name_plural = "Alunos"
-        ordering = ('name',)
+        ordering = ('user',)
 
     def __str__(self):
         """Return the str.name fom the object"""
