@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from datetime import date
 
 
@@ -34,7 +36,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """Um modelo base para todos os intervenientes da escola"""
 
-    TYPE_CHOICES =(
+    TYPE_CHOICES = (
         ("TEACHER", "Professor"),
         ("STUDENT", "Estudante"),
         ("EMPLOYEE", "Funcionário")
@@ -67,7 +69,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     internal_number = models.CharField(
         'Número interno',
         max_length=15,
-        unique=True,
         blank=True,
     )
     email = models.EmailField(
@@ -252,10 +253,33 @@ class Employee(models.Model):
     )
 
     class Meta:
-        verbose_name = "Aluno"
-        verbose_name_plural = "Alunos"
+        verbose_name = "Funcionário"
+        verbose_name_plural = "Funcionários"
         ordering = ('user',)
 
     def __str__(self):
         """Return the str.name fom the object"""
         return self.user.name
+
+'''
+# para tentar registar um utilizador e um profile ao mesmo tempo
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        if instance.type == 'TEACHER':
+            Teacher.objects.create(user=instance)
+        if instance.type == 'STUDENT':
+            Student.objects.create(user=instance)
+        if instance.type == 'EMPLOYEE':
+            Employee.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    if instance.type == 'TEACHER':
+        instance.teacher.save()
+    if instance.type == 'STUDENT':
+        instance.student.save()
+    if instance.type == 'EMPLOYEE':
+        instance.emplyee.save()
+'''
