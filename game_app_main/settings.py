@@ -39,6 +39,7 @@ INSTALLED_APPS = [
 
     # my apps
     'apps.accounts',
+    'apps.school_structure',
 
     # other apps
     'django_extensions',

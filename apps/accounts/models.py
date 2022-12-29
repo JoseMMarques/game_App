@@ -64,12 +64,17 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=100,
         default='F',
     )
+    internal_number = models.CharField(
+        'Número interno',
+        max_length=15,
+        blank=True,
+    )
     email = models.EmailField(
         'e-mail',
         max_length=254,
         unique=True,
     )
-    phone_number = models.CharField(
+    phone = models.CharField(
         'Telemóvel',
         max_length=12,
         blank=True,
@@ -78,13 +83,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         'Morada',
         blank=True,
     )
-
     # required fields
-    date_joined = models.DateTimeField(
-        auto_now_add=True
-    )
     last_login = models.DateTimeField(
-        'Último login',
+        'Último acesso',
         auto_now_add=True
     )
     created = models.DateTimeField(
@@ -122,6 +123,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = "Utilizadores"
         ordering = ['name']
 
+    def __str__(self):
+        """Return the str.name fom the object"""
+        return self.name
+
     def get_age(self):
         """return the age of the user from the birth_date"""
         today = date.today()
@@ -129,10 +134,6 @@ class User(AbstractBaseUser, PermissionsMixin):
             return today.year - self.birth_date.year - (
                     (today.month, today.day) < (self.birth_date.month, self.birth_date.day)
             )
-
-    def __str__(self):
-        """Return the str.name fom the object"""
-        return self.name
 
     def get_first_name(self):
         """Get the user first name"""
@@ -142,36 +143,25 @@ class User(AbstractBaseUser, PermissionsMixin):
         """get the user last name"""
         return str(self).split(" ")[-1]
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
-
     def has_perm(self, perm, obj=None):
         return self.is_admin
 
     def has_module_perms(self, app_label):
         return True
 
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.type = self.base_type
-        return super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if not self.id:
+    #         self.type = self.base_type
+    #     return super().save(*args, **kwargs)
 
     objects = UserManager()
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name']
 
 
 class TeacherManager(models.Manager):
     def get_queryset(self, *args, **kwargs):
         return super().get_queryset(*args, **kwargs).filter(type=User.Types.TEACHER)
-
-
-class StudentManager(models.Manager):
-    def get_queryset(self, *args, **kwargs):
-        return super().get_queryset(*args, **kwargs).filter(type=User.Types.STUDENT)
-
-
-class EmployeeManager(models.Manager):
-    def get_queryset(self, *args, **kwargs):
-        return super().get_queryset(*args, **kwargs).filter(type=User.Types.EMPLOYEE)
 
 
 class Teacher(User):
@@ -188,74 +178,21 @@ class Teacher(User):
         verbose_name_plural = "Professores"
         ordering = ('name',)
 
-
-class Student(User):
-    base_type = User.Types.STUDENT
-    objects = StudentManager()
-
-    class Meta:
-        proxy = True
-        verbose_name = "Aluno"
-        verbose_name_plural = "Alunos"
-        ordering = ('name',)
-
-
-class Employee(User):
-    base_type = User.Types.EMPLOYEE
-    objects = EmployeeManager()
-
-    class Meta:
-        proxy = True
-        verbose_name = "Funcionário"
-        verbose_name_plural = "Funcionários"
-        ordering = ('name',)
-
-
-class SchoolClass(models.Model):
-    """Modelo para as turmas"""
-
-    name = models.CharField(
-        'Designação da turma',
-        max_length=20,
-    )
-    school_year = models.CharField(
-        'Ano Letivo',
-        max_length=20,
-    )
-    school = models.CharField(
-        'Escola',
-        max_length=20,
-    )
-    teacher_dt = models.OneToOneField(
-        Teacher,
-        on_delete=models.CASCADE,
-    )
-    created = models.DateTimeField(
-        'Criado em',
-        auto_now_add=True
-    )
-    modified = models.DateTimeField(
-        'modificado em',
-        auto_now=True
-    )
-
-    def __str__(self):
-        """Return the str.name fom the object"""
-        return self.name
-
-    class Meta:
-        verbose_name = "Turma"
-        verbose_name_plural = "Turmas"
-        ordering = ('name',)
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.type = User.Types.TEACHER
+        return super().save(*args, **kwargs)
 
 
 class TeacherMore(models.Model):
+    """Um modelo para os professores da escola"""
+
     user = models.OneToOneField(
         Teacher,
         on_delete=models.CASCADE
     )
     school_class_dt = models.OneToOneField(
-        SchoolClass,
+        'school_structure.SchoolClass',
         verbose_name='Direção de Turma',
         on_delete=models.CASCADE,
         blank=True,
@@ -279,3 +216,116 @@ class TeacherMore(models.Model):
         verbose_name_plural = "Professores"
         ordering = ('user',)
 
+
+class StudentManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(type=User.Types.STUDENT)
+
+
+class Student(User):
+    base_type = User.Types.STUDENT
+    objects = StudentManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = "Aluno"
+        verbose_name_plural = "Alunos"
+        ordering = ('name',)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.type = User.Types.STUDENT
+        return super().save(*args, **kwargs)
+
+
+class StudentMore(models.Model):
+    """Um modelo para os alunos da escola"""
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True
+    )
+    school_class = models.ForeignKey(
+        'school_structure.SchoolClass',
+        verbose_name='Turma',
+        on_delete=models.CASCADE,
+    )
+    class_number = models.PositiveSmallIntegerField(
+        'Número de turma',
+        blank=False,
+    )
+    name_ee = models.CharField(
+        'Encarregado de Educação',
+        max_length=150,
+        blank=True,
+    )
+    email_ee = models.EmailField(
+        'Email do EE',
+        max_length=254,
+        blank=True,
+    )
+    phone_ee = models.CharField(
+        'Telemóvel',
+        max_length=12,
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name = "Aluno"
+        verbose_name_plural = "Alunos"
+        ordering = ('user',)
+
+    def __str__(self):
+        """Return the str.name fom the object"""
+        return self.user.name
+
+
+class EmployeeManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(type=User.Types.EMPLOYEE)
+
+
+class Employee(User):
+    base_type = User.Types.EMPLOYEE
+    objects = EmployeeManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = "Funcionário"
+        verbose_name_plural = "Funcionários"
+        ordering = ('name',)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.type = User.Types.EMPLOYEE
+        return super().save(*args, **kwargs)
+
+
+class EmployeeMore(models.Model):
+    """Um modelo para os funcionários da escola"""
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True
+    )
+    role = models.CharField(
+        'Função',
+        max_length=150,
+        blank=True,
+    )
+    workplace = models.CharField(
+        'Local de Trabalho',
+        max_length=150,
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name = "Funcionário"
+        verbose_name_plural = "Funcionários"
+        ordering = ('user',)
+
+    def __str__(self):
+        """Return the str.name fom the object"""
+        return self.user.name

@@ -17,7 +17,7 @@ class UserAdminForm(forms.ModelForm):
     class Meta:
         model = User
         fields = [
-            'type', 'name', 'birth_date', 'sex', 'email', 'phone_number', 'address',
+            'type', 'name', 'birth_date', 'sex', 'email', 'phone', 'address',
             'is_admin', 'is_staff', 'is_active', 'is_superadmin', 'is_game',
         ]
 
@@ -28,5 +28,5 @@ class UserChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = [
-            'name', 'birth_date', 'phone_number', 'address',
+            'name', 'birth_date', 'phone', 'address',
         ]
