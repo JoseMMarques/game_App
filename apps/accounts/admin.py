@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Teacher, Student, Employee, TeacherMore, SchoolClass
+from .models import User, Teacher, Student, Employee, TeacherMore
 from .forms import UserAdminCreationForm, UserAdminForm
 
 
@@ -75,11 +75,5 @@ admin.site.register(Employee, EmployeeAdmin)
 class TeacherMoreAdmin(admin.ModelAdmin):
     pass
 
+
 admin.site.register(TeacherMore, TeacherMoreAdmin)
-
-
-class SchoolClassAdmin(admin.ModelAdmin):
-    pass
-
-
-admin.site.register(SchoolClass, SchoolClassAdmin)
