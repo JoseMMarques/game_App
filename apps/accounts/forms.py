@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, ReadOnlyPasswordHashField
 from django import forms
 from .models import User
 
@@ -14,6 +14,15 @@ class UserAdminCreationForm(UserCreationForm):
 class UserAdminForm(forms.ModelForm):
     """ Formulário para a configuração de mais dados do utilizador no Admin"""
 
+    password = ReadOnlyPasswordHashField(
+        label="Password",
+        help_text=
+        "Raw passwords are not stored, so there is no way to see this "
+        "user’s password, but you can change the password using "
+        '<a href="{}">this form</a>.'
+        ,
+    )
+
     class Meta:
         model = User
         fields = [
@@ -28,6 +37,6 @@ class UserChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = [
-            'name', 'birth_date', 'phone', 'address',
+            'name', 'birth_date', 'phone', 'address', "password",
         ]
 

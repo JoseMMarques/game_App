@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin, AdminPasswordChangeForm
 from .models import User, Teacher, Student, Employee, TeacherMore, StudentMore, EmployeeMore
 from .forms import UserAdminCreationForm, UserAdminForm
 
@@ -15,6 +15,7 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
     form = UserAdminForm
+    change_password_form = AdminPasswordChangeForm
     fieldsets = (
         (None, {
             'fields': ('email', 'password', 'type', )
@@ -31,6 +32,7 @@ class UserAdmin(BaseUserAdmin):
             }
         )
     )
+
     list_display = [
         'type', 'name', 'get_first_name', 'get_last_name', 'get_age', 'birth_date', 'sex', 'phone',
         'address', 'is_game'
