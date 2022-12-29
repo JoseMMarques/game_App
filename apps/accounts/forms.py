@@ -30,3 +30,4 @@ class UserChangeForm(forms.ModelForm):
         fields = [
             'name', 'birth_date', 'phone', 'address',
         ]
+

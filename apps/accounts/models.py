@@ -120,8 +120,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         """options (metadata) to the field"""
         verbose_name = "Utilizador"
-        verbose_name_plural = "Utilizadores"
-        ordering = ['name']
+        verbose_name_plural = "Todos os Utilizadores"
+        ordering = ['type']
 
     def __str__(self):
         """Return the str.name fom the object"""
@@ -181,6 +181,8 @@ class Teacher(User):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.type = User.Types.TEACHER
+            # para encriptar a password
+            self.set_password(self.password)
         return super().save(*args, **kwargs)
 
 
@@ -212,8 +214,8 @@ class TeacherMore(models.Model):
         return self.user.name
 
     class Meta:
-        verbose_name = "Professor"
-        verbose_name_plural = "Professores"
+        verbose_name = "Prof ++"
+        verbose_name_plural = "Profes ++"
         ordering = ('user',)
 
 
@@ -235,6 +237,8 @@ class Student(User):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.type = User.Types.STUDENT
+            # para encriptar a password
+            self.set_password(self.password)
         return super().save(*args, **kwargs)
 
 
@@ -266,14 +270,14 @@ class StudentMore(models.Model):
         blank=True,
     )
     phone_ee = models.CharField(
-        'Telemóvel',
+        'Telemóvel do EE',
         max_length=12,
         blank=True,
     )
 
     class Meta:
-        verbose_name = "Aluno"
-        verbose_name_plural = "Alunos"
+        verbose_name = "Aluno ++"
+        verbose_name_plural = "Alunos ++"
         ordering = ('user',)
 
     def __str__(self):
@@ -299,6 +303,8 @@ class Employee(User):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.type = User.Types.EMPLOYEE
+            # para encriptar a password
+            self.set_password(self.password)
         return super().save(*args, **kwargs)
 
 
@@ -322,8 +328,8 @@ class EmployeeMore(models.Model):
     )
 
     class Meta:
-        verbose_name = "Funcionário"
-        verbose_name_plural = "Funcionários"
+        verbose_name = "Funcionário ++"
+        verbose_name_plural = "Funcionários ++"
         ordering = ('user',)
 
     def __str__(self):
