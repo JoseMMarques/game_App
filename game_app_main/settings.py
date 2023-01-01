@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     # other apps
     'django_extensions',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

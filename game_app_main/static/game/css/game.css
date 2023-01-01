@@ -1,0 +1,17 @@
+.justificado {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.centrado {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.centradinho {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}

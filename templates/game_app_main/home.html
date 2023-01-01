@@ -1,0 +1,111 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>GAME</title>
+
+    <link rel="icon" href="{% static 'r+prof/img/favicon_io/rProf_favicon.svg' %}" sizes="any" type="image/svg+xml">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="{% static 'admin_lte/plugins/fontawesome-free/css/all.min.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'admin_lte/dist/css/adminlte.min.css' %}">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'game/css/game.css' %}">
+
+    <!-- ToastsR -->
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_lte/plugins/toastr/toastr.css' %}" media="all">
+    <script type="text/javascript" src="{% static 'admin_lte/plugins/toastr/toastr.min.js' %}"></script>
+
+</head>
+<body class="hold-transition layout-top-nav layout-footer-fixed">
+
+<!-- Mensagens do Django -->
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'success' %}
+            <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+        {% elif message.tags == 'info' %}
+            <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+        {% elif message.tags == 'warning' %}
+            <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+        {% elif message.tags == 'error' %}
+            <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
+        <div class="container">
+            <a href="{% url 'home' %}" class="navbar-brand">
+                <img src="{% static 'game/img/game_logo.jpg' %}" alt="game Logo"
+                     class="brand-image img-push elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light">GAME</span>
+            </a>
+
+            <!-- Right navbar links -->
+            <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+                <li class="nav-item">
+                    <a href="{% url 'contas:login' %}" class="nav-link">Login</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- /.navbar -->
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container">
+
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="container">
+                <div class="centradinho">
+                    <img src="{% static 'game/img/game largo3.png' %}" alt="background image" class="centradinho">
+                </div>
+                <div class="centrado">
+
+                </div>
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Main Footer -->
+    {% block footer %}
+
+        {% include 'footer.html' %}
+
+    {% endblock %}
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script src="{% static 'admin_lte/plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'admin_lte/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'admin_lte/dist/js/adminlte.min.js' %}"></script>
+</body>
+</html>
