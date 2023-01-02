@@ -5,11 +5,11 @@
     <footer class="main-footer">
         <!-- To the right -->
         <div class="float-right d-none d-sm-inline">
-            GAME
+            Agrupamento de Escolas de Almancil
         </div>
         <!-- Default to the left -->
         {% if user.is_authenticated %}
-            <strong>Copyright &copy; 2023 <a href="{% url 'home' %}">GAME</a>.</strong> All rights reserved.
+            <strong>Copyright &copy; 2023 <a href="{% url 'game:homepage' %}">GAME</a>.</strong> All rights reserved.
         {% else %}
             <strong>Copyright &copy; 2023 <a href="{% url 'home' %}">GAME</a>.</strong> All rights reserved.
         {% endif %}
