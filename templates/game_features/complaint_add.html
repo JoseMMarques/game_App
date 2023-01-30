@@ -1,0 +1,25 @@
+{% extends 'game_app_main/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+    <section class="content">
+        <div class="register-page"> {#    style="height: 617px"#}
+            <div class="card">
+                <div class="card-body register-card-body" >
+                    <h4><p class="login-box-msg">Registar participação disciplinar</p></h4>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ form }}
+                        </div>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+                <!-- /.form-box -->
+            </div><!-- /.card -->
+        </div>
+        <!-- /.register-box -->
+    </section>
+    <!-- /.section -->
+{% endblock %}
+

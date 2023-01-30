@@ -1,17 +1,19 @@
 from django.db import models
-from apps.accounts.models import Student, Teacher
+from apps.accounts.models import User, Student, Teacher
 
 
-class complaint(models.Model):
+class Complaint(models.Model):
     ''' Um modelo para as participações disciplinares '''
 
     # identificação
     user = models.ForeignKey(
-        Teacher,
+        User,
         on_delete=models.CASCADE
     )
     aluno = models.ForeignKey(
-        Student, on_delete=models.CASCADE
+        Student,
+        related_name='aluno',
+        on_delete=models.CASCADE
     )
     hora = models.TimeField(
         "hora",
