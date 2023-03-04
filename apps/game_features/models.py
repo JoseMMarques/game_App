@@ -15,6 +15,10 @@ class Complaint(models.Model):
         related_name='aluno',
         on_delete=models.CASCADE
     )
+    local = models.CharField(
+        "Local da ocorrência",
+        max_length=200,
+    )
     hora = models.TimeField(
         "hora",
     )
@@ -24,79 +28,79 @@ class Complaint(models.Model):
 
     # comportamentos incorretos
     comer = models.BooleanField(
-        'Comer na sala de aula',
+        'Comer na sala de aula.',
         default=False,
     )
     levantar = models.BooleanField(
-        'Levantar-se durante a aula sem autorização',
+        'Levantar-se durante a aula sem autorização.',
         default=False,
     )
     conversar = models.BooleanField(
-        'Perturbar a aula com conversa e brincadeira',
+        'Perturbar a aula com conversa e brincadeira.',
         default=False,
     )
     entradar_sair_desordeira = models.BooleanField(
-        'Entrar/sair da aula de forma desordeira',
+        'Entrar/sair da aula de forma desordeira.',
         default=False,
     )
     patrimonio = models.BooleanField(
-        'Não respeitar o património escolar',
+        'Não respeitar o património escolar.',
         default=False,
     )
     recolher_imagens = models.BooleanField(
-        'Recolher/divulgar imagens/sons sem autorização',
+        'Recolher/divulgar imagens/sons sem autorização.',
         default=False,
     )
     fumar = models.BooleanField(
-        'Fumar dentro do recinto escolar',
+        'Fumar dentro do recinto escolar.',
         default=False,
     )
     regras_espaços = models.BooleanField(
-        'Não cumprir as regras de utilização dos diversos espaços',
+        'Não cumprir as regras de utilização dos diversos espaços.',
         default=False,
     )
     aparelhos_eletronicos = models.BooleanField(
-        'Utilizar indevidamente o telemóvel ou outro aparelho eletrónico',
+        'Utilizar indevidamente o telemóvel ou outro aparelho eletrónico.',
         default=False,
     )
     linguagem = models.BooleanField(
-        'Utilizar linguagem imprópria',
+        'Utilizar linguagem imprópria.',
         default=False,
     )
-    Ofender_colegas = models.BooleanField(
-        'Ofender verbalmente os colegas',
+    ofender_colegas = models.BooleanField(
+        'Ofender verbalmente os colegas.',
         default=False,
     )
     ameacar = models.BooleanField(
-        'Ameaçar/intimidar colegas',
+        'Ameaçar/intimidar colegas.',
         default=False,
     )
     recusar_trabalhar = models.BooleanField(
-        'recusar-se a trabalhar',
+        'recusar-se a trabalhar.',
         default=False,
     )
     abandonar_aula = models.BooleanField(
-        'abandonar a aula sem autorização do professor',
+        'abandonar a aula sem autorização do professor.',
         default=False,
     )
     Ofender_prof_fun = models.BooleanField(
-        'Ofender verbalmente professores/funcionários',
+        'Ofender verbalmente professores/funcionários.',
         default=False,
     )
     roubar = models.BooleanField(
-        'Roubar/furtar',
+        'Roubar/furtar.',
         default=False,
     )
     nao_obedecer = models.BooleanField(
-        'Não obedecer às indicações do adulto',
+        'Não obedecer às indicações do adulto.',
         default=False,
     )
     agredir = models.BooleanField(
-        'Agredir',
+        'Agredir.',
         default=False,
     )
     contextualizacao = models.TextField(
-        'Breve descrição/contextualização do comportamento incorreto do aluno',
+        'Breve descrição/contextualização do(s) comportamento(s) incorreto(s):',
         blank=True,
     )
 
@@ -105,7 +109,7 @@ class Complaint(models.Model):
         ('EM', 'em atividade Letiva'),
         ('FORA', 'fora de atividade letiva'),
     )
-    sex = models.CharField(
+    atividade = models.CharField(
         'Tipo de atividade',
         choices=ATIVIDADE_CHOICES,
         max_length=50,

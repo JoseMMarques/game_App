@@ -1,0 +1,291 @@
+{% extends 'game_app_main/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Participação Disciplinar</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">General Form</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!--/.col (left) -->
+          <!-- right column -->
+          <div class="col-md-12">
+
+              <!-- general form elements disabled -->
+              <div class="card card-warning">
+                  <div class="card-header">
+                      <h3 class="card-title">Identificação do(a) aluno(a) infrator(a)</h3>
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body">
+
+                      <form method="post" id="participacaoForm"
+                            data-alunos-url="{% url 'game:ajax_load_alunos' %}"
+                            data-numero-aluno-url="{% url 'game:ajax_load_numero_aluno' %}" novalidate>
+                          {% csrf_token %}
+
+                          <div class="row">
+                              <div class="col-sm-3">
+                                  <!-- text input -->
+                                  <div class="form-group">
+                                      <label>Turma</label>
+                                      {% render_field form.turma class="form-control" placeholder=field.label %}
+                                  </div>
+                              </div>
+                              <div class="col-sm-6">
+                                  <div class="form-group">
+                                      <label>Nome</label>
+                                      {% render_field form.aluno class="form-control" placeholder=field.label %}
+                                  </div>
+                              </div>
+                              <div class="col-sm-3">
+                                  <div class="form-group">
+                                      <label>Número</label>
+                                      {% render_field form.class_number class="form-control" placeholder=field.label disabled="disabled" %}
+                                  </div>
+                              </div>
+                          </div>
+
+                      </form>
+
+                  </div>
+
+
+              </div>
+              <!-- /.card -->
+              <!-- general form elements disabled -->
+
+
+              <!-- general form elements disabled -->
+              <div class="card card-blue">
+                  <div class="card-header">
+                      <h3 class="card-title">Local, data e hora da ocorrência</h3>
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body">
+
+                      <form method="post" id="participacao2Form">
+                          {% csrf_token %}
+
+                          <div class="row">
+                              <div class="col-sm-6">
+                                  <!-- text input -->
+                                  <div class="form-group">
+                                      <label>Local</label>
+                                      {% render_field form.local class="form-control" placeholder=field.label %}
+                                  </div>
+                              </div>
+                              <div class="col-sm-3">
+                                  <div class="form-group">
+                                      <label>dia</label>
+                                      {% render_field form.dia class="form-control" placeholder=field.label %}
+                                  </div>
+                              </div>
+                              <div class="col-sm-3">
+                                  <div class="form-group">
+                                      <label>hora</label>
+                                      {% render_field form.hora class="form-control" placeholder=field.label %}
+                                  </div>
+                              </div>
+                          </div>
+
+                      </form>
+
+                  </div>
+                  <!-- /.card-body -->
+              </div>
+
+            <!-- /.card -->
+            <!-- general form elements disabled -->
+
+
+
+
+            <div class="card card-orange">
+              <div class="card-header">
+                <h3 class="card-title">Comportamentos incorretos</h3>
+              </div>
+              <!-- /.card-header -->
+                <div class="card-body">
+
+                    <form method="post" id="participacao3Form">
+                        {% csrf_token %}
+
+
+                        <div class="row">
+                    <div class="col-sm-6">
+                      <!-- checkbox -->
+                      <div class="form-group">
+                        <div class="form-check">
+                            {{ form.comer }}
+                          <input class="form-check-input" type="checkbox">
+                          <label class="form-check-label">Checkbox</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" checked>
+                          <label class="form-check-label">Checkbox checked</label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" disabled>
+                          <label class="form-check-label">Checkbox disabled</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+
+
+
+
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>Local</label>
+                                    {% render_field form.comer  placeholder=field.label %}
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>dia</label>
+                                    {% render_field form.dia class="form-control" placeholder=field.label %}
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>hora</label>
+                                    {% render_field form.hora class="form-control" placeholder=field.label %}
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+                        <div class="form-group">
+                            {{ form }}
+                        </div>
+                        <button type="submit">Submit</button>
+                    </form>
+
+
+
+
+
+
+
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+            <!-- general form elements disabled -->
+
+
+
+
+
+
+<!-- general form elements disabled -->
+              <div class="card card-success">
+                  <div class="card-header">
+                      <h3 class="card-title">Participação feita por</h3>
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body">
+
+                      <div class="row">
+                          <div class="col-sm-4">
+                              <!-- text input -->
+                              <div class="form-group">
+                                  <label>Nome</label>
+                                  {% render_field form.user class="form-control" placeholder=field.label %}
+                              </div>
+                          </div>
+                          <div class="col-sm-4">
+                              <div class="form-group">
+                                  <label>Na qualidade de</label>
+                                  {% render_field form.user class="form-control" placeholder=field.label %}
+                              </div>
+                          </div>
+                          <div class="col-sm-4">
+                              <div class="form-group">
+                                  <label>Data</label>
+                                  <input type="text"  class="form-control" placeholder="{% now 'D d M Y - H:i' %}" disabled>
+                              </div>
+                          </div>
+                      </div>
+
+                  </div>
+              </div>
+            <!-- Form Element sizes -->
+
+
+
+
+          </div>
+          <!--/.col (right) -->
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+

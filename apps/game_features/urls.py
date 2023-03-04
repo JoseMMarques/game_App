@@ -8,4 +8,6 @@ app_name = 'game'
 urlpatterns = [
     path("", views.homepage, name="homepage"),
     path("participacao/criar/", views.complaint_add_view, name="complaint_add"),
+    path("ajax/load-alunos/", views.load_alunos_da_turma, name="ajax_load_alunos"),
+    path("ajax/load-numero-aluno/", views.load_numero_do_aluno, name="ajax_load_numero_aluno"),
 ]
