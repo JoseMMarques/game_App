@@ -30,3 +30,20 @@ class ComplaintAddFormManual(forms.ModelForm):
     class Meta:
         model = Complaint
         fields = "__all__"
+        widgets = {
+            'dia': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={
+                    'type': 'date',
+                },
+            ),
+            'hora': forms.TimeInput(
+                format='%H:%M',
+                attrs={
+                    'type': 'time',
+                },
+            ),
+        }
+
+# Todo: acrescentar no HTML campos para indicar os erros no formulário.
+# TODO: acrescentar Participação disciplinar ao Admin

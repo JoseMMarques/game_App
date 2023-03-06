@@ -31,7 +31,7 @@
 
                         <div class="card card-warning">
                             <div class="card-header">
-                                <h3 class="card-title">Formulário de participação disciplinar</h3>
+                                <h3 class="card-title"> <b>Formulário de participação disciplinar</b></h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
@@ -41,7 +41,7 @@
                                       data-numero-aluno-url="{% url 'game:ajax_load_numero_aluno' %}" novalidate>
                                     {% csrf_token %}
 
-                                    <h5><b>A - Identificação do aluno infrator:</b></h5>
+                                    <h5 class="text-primary"><b>A - Identificação do aluno infrator:</b></h5>
                                     <hr>
 
                                     <div class="row">
@@ -68,34 +68,34 @@
 
                                     <br>
                                     <br>
-                                    <h5><b>B - Local, data e hora da ocorrência:</b></h5>
+                                    <h5 class="text-primary"><b>B - Local, data e hora da ocorrência:</b></h5>
                                     <hr>
 
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <!-- text input -->
                                             <div class="form-group">
-                                                <label>Local</label>
+                                                <label>{{ form.local.label }}</label>
                                                 {% render_field form.local class="form-control" placeholder=field.label %}
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label>dia</label>
+                                                <label>{{ form.dia.label }}</label>
                                                 {% render_field form.dia class="form-control" placeholder=field.label %}
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label>hora</label>
-                                                {% render_field form.hora class="form-control" placeholder=field.label %}
+                                                <label>{{ form.hora.label }}</label>
+                                                {% render_field form.hora type="time" class="form-control" placeholder=field.label %}
                                             </div>
                                         </div>
                                     </div>
 
                                     <br>
                                     <br>
-                                    <h5><b>C - Comportamentos incorretos:</b></h5>
+                                    <h5 class="text-primary"><b>C - Comportamentos incorretos:</b></h5>
                                     <hr>
 
 
@@ -292,7 +292,7 @@
 
                                     <br>
                                     <br>
-                                    <h5><b>D - Informação complementar:</b></h5>
+                                    <h5 class="text-primary"><b>D - Informação complementar:</b></h5>
                                     <hr>
 
                                     <div class="row">
@@ -333,7 +333,53 @@
                                         </div>
                                     </div>
 
-                                <button type="submit">Submit</button>
+                                    <br>
+
+                                    <!-- Autor da Participação -->
+                                    <div class="card card-success">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Participação feita por</h3>
+                                        </div>
+                                        <!-- /.card-header -->
+                                        <div class="card-body">
+
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <!-- text input -->
+                                                    <div class="form-group">
+                                                        <label>Nome: </label>
+                                                        <input type="text"  class="form-control" placeholder="{{request.user.name}}" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label>Na qualidade de:</label>
+                                                        <input type="text"  class="form-control" placeholder="{{request.user.get_type}}" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label>Data:</label>
+                                                        <input type="text"  class="form-control" placeholder="{% now 'D d M Y' %}" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!-- Fim de Autor da Perticipação -->
+
+                                    <br>
+
+                                    <!-- Botão de submeter -->
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <button type="submit" id="submeter" class="btn btn-outline-danger ">
+                                                <b>submeter formulário de participação disciplinar</b>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- Fim de Botão de submeter -->
 
                                 </form>
 
@@ -350,4 +396,3 @@
     <!-- /.content-wrapper -->
 
 {% endblock %}
-

@@ -10,6 +10,17 @@ class Complaint(models.Model):
         User,
         on_delete=models.CASCADE
     )
+    QUALIDADE_CHOICES = (
+        ('A', 'Aluno'),
+        ('F', 'Funcionário'),
+        ('P', 'Professor'),
+    )
+    qualidade = models.CharField(
+        'qualidade',
+        choices=QUALIDADE_CHOICES,
+        max_length=100,
+        default='P',
+    )
     aluno = models.ForeignKey(
         Student,
         related_name='aluno',
@@ -20,10 +31,10 @@ class Complaint(models.Model):
         max_length=200,
     )
     hora = models.TimeField(
-        "hora",
+        "Hora da ocorrência",
     )
     dia = models.DateField(
-        'dia',
+        'Dia da ocorrência',
     )
 
     # comportamentos incorretos
