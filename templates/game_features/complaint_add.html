@@ -51,18 +51,53 @@
                                                 <label>Turma</label>
                                                 {% render_field form.turma class="form-control" placeholder=field.label %}
                                             </div>
+
+                                            <!-- Erros neste campo -->
+                                            {% for error in form.turma.errors %}
+                                                <h6 class="text-danger" style="list-style-type: square;">
+                                                    <ul>
+                                                        <li>
+                                                            {{ error }}
+                                                        </li>
+                                                    </ul>
+                                                </h6>
+                                            {% endfor %}
+
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label>Nome</label>
                                                 {% render_field form.aluno class="form-control" placeholder=field.label %}
                                             </div>
+
+                                            <!-- Erros neste campo -->
+                                            {% for error in form.aluno.errors %}
+                                                <h6 class="text-danger" style="list-style-type: square;">
+                                                    <ul>
+                                                        <li>
+                                                            {{ error }}
+                                                        </li>
+                                                    </ul>
+                                                </h6>
+                                            {% endfor %}
+
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label>Número</label>
                                                 {% render_field form.class_number class="form-control" placeholder=field.label disabled="disabled" %}
                                             </div>
+
+                                            {% for error in form.class_number.errors %}
+                                                <h6 class="text-danger" style="list-style-type: square;">
+                                                    <ul>
+                                                        <li>
+                                                            {{ error }}
+                                                        </li>
+                                                    </ul>
+                                                </h6>
+                                            {% endfor %}
+
                                         </div>
                                     </div>
 
@@ -78,18 +113,52 @@
                                                 <label>{{ form.local.label }}</label>
                                                 {% render_field form.local class="form-control" placeholder=field.label %}
                                             </div>
+
+                                            {% for error in form.local.errors %}
+                                                <h6 class="text-danger" style="list-style-type: square;">
+                                                    <ul>
+                                                        <li>
+                                                            {{ error }}
+                                                        </li>
+                                                    </ul>
+                                                </h6>
+                                            {% endfor %}
+
+
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label>{{ form.dia.label }}</label>
                                                 {% render_field form.dia class="form-control" placeholder=field.label %}
                                             </div>
+
+                                            {% for error in form.dia.errors %}
+                                                <h6 class="text-danger" style="list-style-type: square;">
+                                                    <ul>
+                                                        <li>
+                                                            {{ error }}
+                                                        </li>
+                                                    </ul>
+                                                </h6>
+                                            {% endfor %}
+
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label>{{ form.hora.label }}</label>
                                                 {% render_field form.hora type="time" class="form-control" placeholder=field.label %}
                                             </div>
+
+                                            {% for error in form.hora.errors %}
+                                                <h6 class="text-danger" style="list-style-type: square;">
+                                                    <ul>
+                                                        <li>
+                                                            {{ error }}
+                                                        </li>
+                                                    </ul>
+                                                </h6>
+                                            {% endfor %}
+
                                         </div>
                                     </div>
 
