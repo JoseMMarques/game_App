@@ -1,6 +1,6 @@
 $( document ).ready(function() {
 
-    // função mudança do campo ano_letivo na form
+    // função mudança do campo turma na form
     $("#id_turma").change(function () {
 
         var url = $("#participacaoForm").attr("data-alunos-url");   // get the url of the `load_alunos_da_turma` view

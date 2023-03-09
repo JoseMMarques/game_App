@@ -146,3 +146,13 @@ class Complaint(models.Model):
         'Criado em',
         auto_now_add=True
     )
+
+    class Meta:
+        """options (metadata) to the field"""
+        verbose_name = "Participação disciplinar"
+        verbose_name_plural = "Participações disciplinares"
+        ordering = ['user']
+
+    def __str__(self):
+        """Return the str.name fom the object"""
+        return self.user.name
