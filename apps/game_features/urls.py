@@ -3,7 +3,7 @@ from django.urls import path, reverse_lazy
 from apps.game_features import views
 
 
-app_name = 'game'
+app_name = 'game_features'
 
 urlpatterns = [
     path("", views.homepage, name="homepage"),

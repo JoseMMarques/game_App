@@ -19,7 +19,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f"Efetuou login com sucesso, '{username}'")
-                return redirect('game:homepage')
+                return redirect('game_features:homepage')
             else:
                 messages.error(request, "Utilizador e/ou password inválidos!")
         else:
@@ -51,7 +51,7 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user)     # importante!
             messages.success(request, 'A sua password foi atualizada com sucesso!')
-            return redirect('game:homepage')
+            return redirect('game_features:homepage')
         else:
             messages.error(request, 'Corrija os erros abaixo indicados!')
     else:

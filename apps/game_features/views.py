@@ -21,17 +21,27 @@ def complaint_add_view(request):
 
     participacao = Complaint()
     participacao.user = request.user
-    form = ComplaintAddFormManual(request.POST or None, participacao)
+
     if request.method == 'POST':
+        form = ComplaintAddFormManual(request.POST, participacao)
         if form.is_valid():
+            data = form.cleaned_data
+            print(type(data))
             participacao = form.save(commit=False)
             participacao.user_id = request.user.id
             participacao.save()
             messages.success(request, f"Participação registada com sucesso")
             return redirect('game_features:homepage')
         else:
-            messages.error(request, "corrija os erros abaixo indicados")
+            if form.errors:
+                for error in form.errors:
+                    print(error)
+                messages.error(request, "corrija os erros abaixo indicados")
+            template_name = 'game_features/complaint_add.html'
+            context = {'form': form}
+            return render(request, template_name, context)
 
+    form = ComplaintAddFormManual
     template_name = 'game_features/complaint_add.html'
     context = {'form': form}
     return render(request, template_name, context)

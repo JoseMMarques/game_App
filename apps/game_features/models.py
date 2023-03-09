@@ -21,6 +21,10 @@ class Complaint(models.Model):
         max_length=100,
         default='P',
     )
+    class_number = models.CharField(
+        "Número",
+        max_length=200,
+    )
     aluno = models.ForeignKey(
         Student,
         related_name='aluno',
@@ -142,5 +146,3 @@ class Complaint(models.Model):
         'Criado em',
         auto_now_add=True
     )
-
-    # TODO: fazer formulário para este modelo

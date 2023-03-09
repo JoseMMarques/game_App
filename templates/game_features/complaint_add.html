@@ -37,8 +37,8 @@
                             <div class="card-body">
 
                                 <form method="post" id="participacaoForm"
-                                      data-alunos-url="{% url 'game:ajax_load_alunos' %}"
-                                      data-numero-aluno-url="{% url 'game:ajax_load_numero_aluno' %}" novalidate>
+                                      data-alunos-url="{% url 'game_features:ajax_load_alunos' %}"
+                                      data-numero-aluno-url="{% url 'game_features:ajax_load_numero_aluno' %}" novalidate>
                                     {% csrf_token %}
 
                                     <h5 class="text-primary"><b>A - Identificação do aluno infrator:</b></h5>

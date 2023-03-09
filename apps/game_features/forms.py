@@ -24,12 +24,14 @@ class ComplaintAddFormManual(forms.ModelForm):
         help_text="Turma",
         empty_label="turma",
     )
-
-    class_number = forms.CharField()
+    class_number = forms.CharField(
+        required=False,
+    )
 
     class Meta:
         model = Complaint
-        fields = "__all__"
+        exclude = ['user', 'qualidade']
+
         widgets = {
             'dia': forms.DateInput(
                 format='%Y-%m-%d',
@@ -45,5 +47,4 @@ class ComplaintAddFormManual(forms.ModelForm):
             ),
         }
 
-# Todo: acrescentar no HTML campos para indicar os erros no formulário.
-# TODO: acrescentar Participação disciplinar ao Admin
+# TODO: acrescentar Modelo da Participação disciplinar ao Admin
