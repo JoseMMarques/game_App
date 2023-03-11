@@ -31,7 +31,7 @@ $( document ).ready(function() {
         $.ajax({                        // initialize an AJAX request
             url: url,                          // set the url of the request (= localhost:8000/ajax/load_numero_aluno/)
             data: {
-                'aluno': alunoId               // add the alunoID to the GET parameters
+                'aluno': alunoId,             // add the alunoID to the GET parameters
             },
              success: function (data) {        // `data` is the return of the `load_numero_aluno` view function
 

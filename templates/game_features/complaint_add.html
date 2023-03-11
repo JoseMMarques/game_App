@@ -85,7 +85,7 @@
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label>Número</label>
-                                                {% render_field form.class_number class="form-control" placeholder=field.label disabled="disabled" %}
+                                                {% render_field form.class_number class="form-control" readonly="readonly" %}
                                             </div>
 
                                             {% for error in form.class_number.errors %}

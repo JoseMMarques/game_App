@@ -24,14 +24,10 @@ class ComplaintAddFormManual(forms.ModelForm):
         help_text="Turma",
         empty_label="turma",
     )
-    class_number = forms.CharField(
-        required=False,
-    )
 
     class Meta:
         model = Complaint
         exclude = ['user', 'qualidade']
-
         widgets = {
             'dia': forms.DateInput(
                 format='%Y-%m-%d',

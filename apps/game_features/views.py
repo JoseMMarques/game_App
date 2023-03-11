@@ -29,7 +29,7 @@ def complaint_add_view(request):
             print(data)
             participacao = form.save(commit=False)
             participacao.user_id = request.user.id
-            participacao.class_number = request.POST.get('id_class_number', False)
+            participacao.class_number = int(data['class_number'])
             participacao.save()
             messages.success(request, f"Participação registada com sucesso")
             return redirect('game_features:homepage')
@@ -91,5 +91,5 @@ def load_numero_do_aluno(request):
     return render(
         request,
         template_name,
-        {'numero_aluno': str(numero_aluno)}
+        {'numero_aluno': numero_aluno}
     )
