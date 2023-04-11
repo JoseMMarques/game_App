@@ -21,6 +21,17 @@ def complaint_add_view(request):
 
     participacao = Complaint()
     participacao.user = request.user
+    user = User.objects.get(id=request.user.id)
+    qualidade = ''
+    print(user.type)
+    if user.type == user.Types.EMPLOYEE:
+        qualidade = 'F'
+    if user.type == user.Types.STUDENT:
+        qualidade = 'A'
+    if user.type == user.Types.TEACHER:
+        qualidade = 'P'
+
+    print(qualidade)
 
     if request.method == 'POST':
         form = ComplaintAddFormManual(request.POST, participacao)
@@ -30,6 +41,7 @@ def complaint_add_view(request):
             participacao = form.save(commit=False)
             participacao.user_id = request.user.id
             participacao.class_number = int(data['class_number'])
+            participacao.qualidade = qualidade
             participacao.save()
             messages.success(request, f"Participação registada com sucesso")
             return redirect('game_features:homepage')
