@@ -1,5 +1,6 @@
 {% extends 'game_app_main/base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 {% block content %}
 
     <!-- Content Wrapper. Contains page content -->
@@ -14,19 +15,174 @@
 
         <!-- Main content -->
         <div class="content">
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="info-box shadow">
-                    <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">Participações disciplinares</span>
-                        <a href="{% url 'game_features:complaint_add' %}">
-                            <span class="info-box-number">Criar</span>
-                        </a>
+            <a href="{% url 'game_features:complaint_add' %}">
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="info-box shadow">
+                        <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-number">Criar nova participação disciplinar</span>
+                        </div>
+                        <!-- /.info-box-content -->
                     </div>
-                    <!-- /.info-box-content -->
+                    <!-- /.info-box -->
                 </div>
-                <!-- /.info-box -->
-            </div>
+            </a>
+            {% if my_complaints %}
+                <div class="row">
+                <div class="col-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">As minhas participações &nbsp</h3>
+                        <span class="badge bg-gray"> {{ my_complaints.count }} </span>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive p-0" style="height: 300px;">
+                        <table class="table table-head-fixed text-nowrap">
+                            <thead>
+                            <tr>
+                                <th>Turma</th>
+                                <th>Número</th>
+                                <th>Aluno Infrator</th>
+                                <th>Data da ocorrência</th>
+                                <th>Data da participação</th>
+                                <th>Estado</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for complaint in my_complaints %}
+                                <tr>
+                                    <td>{{ complaint.class_number }}</td>
+                                    <td>{{ complaint.class_number }}</td>
+                                    <td>{{ complaint.aluno }}</td>
+                                    <td>{{ complaint.dia }}</td>
+                                    <td>{{ complaint.created }}</td>
+                                    <td>pendente</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            {% endif %}
+
+            {% if my_dt_complaints %}
+                <div class="row">
+                <div class="col-12">
+                <div class="card card-green">
+                    <div class="card-header">
+                        <h3 class="card-title">Participações da minha Direção de Turma &nbsp</h3>
+                        <span class="badge bg-gray"> {{ my_dt_complaints.count }} </span>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive p-0" style="height: 300px;">
+                        <table class="table table-head-fixed text-nowrap">
+                            <thead>
+                            <tr>
+                                <th>Turma</th>
+                                <th>Número</th>
+                                <th>Aluno Infrator</th>
+                                <th>Data da ocorrência</th>
+                                <th>Data da participação</th>
+                                <th>Estado</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for complaint in my_dt_complaints %}
+                                <tr>
+                                    <td>{{ complaint.class_number }}</td>
+                                    <td>{{ complaint.class_number }}</td>
+                                    <td>{{ complaint.aluno }}</td>
+                                    <td>{{ complaint.dia }}</td>
+                                    <td>{{ complaint.created }}</td>
+                                    <td>pendente</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            {% endif %}
+
+
+            {% if all_complaints %}
+                <div class="row">
+                <div class="col-12">
+                <div class="card card-fuchsia">
+                    <div class="card-header">
+                        <h3 class="card-title">Todas as participações &nbsp </h3>
+                        <span class="badge bg-gray">  {{ all_complaints.count }}</span>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive p-0" style="height: 300px;">
+                        <table class="table table-head-fixed text-nowrap">
+                            <thead>
+                            <tr>
+                                <th>Turma</th>
+                                <th>Número</th>
+                                <th>Aluno Infrator</th>
+                                <th>Data da ocorrência</th>
+                                <th>Data da participação</th>
+                                <th>Estado</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for complaint in all_complaints %}
+                                <tr>
+                                    <td>{{ complaint.class_number }}</td>
+                                    <td>{{ complaint.class_number }}</td>
+                                    <td>{{ complaint.aluno }}</td>
+                                    <td>{{ complaint.dia }}</td>
+                                    <td>{{ complaint.created }}</td>
+                                    <td>pendente</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer card-gray-dark clearfix">
+                    </div>
+                </div>
+                <!-- /.card -->
+            {% endif %}
+
+
+
+
+
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
         </div>
         <!-- /.content -->
     </div>

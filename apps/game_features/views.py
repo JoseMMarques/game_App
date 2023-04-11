@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from apps.game_features.models import Complaint
-from apps.accounts.models import User, Student
+from apps.accounts.models import User, Student, Teacher
 from .forms import ComplaintAddForm, ComplaintAddFormManual
 
 
@@ -12,6 +12,43 @@ def homepage(request):
 
     template_name = 'game_features/homepage.html'
     context = {}
+    user = User.objects.get(id=request.user.id)
+    print('request user')
+    print(user)
+
+    # as minhas participações disciplinares
+    my_complaits = Complaint.objects.filter(user=user)
+    context['my_complaints'] = my_complaits
+    print('Base')
+    print(context)
+
+    # Se diretor turma
+    # lista com participações da minha direcao de turma
+    if user.type == user.Types.TEACHER:
+        teacher = Teacher.objects.get(id=user.id)
+        print('teacher')
+        print(teacher)
+        try:
+            # para o caso do professor não ter dados na classe TeacherMore
+            if teacher.teachermore.is_dt:
+                turma = teacher.teachermore.school_class_dt
+                print(turma)
+                my_dt_complaints = Complaint.objects.filter(aluno__studentmore__school_class=turma)
+                context['my_dt_complaints'] = my_dt_complaints
+                print('ProfDT')
+                print(context['my_dt_complaints'])
+        except:
+            print('o professor não é DT')
+
+    # Se user for do GAME
+    # listar participações de todos os alunos da escola  :)
+    if user.is_game:
+        all_complaints = Complaint.objects.all()
+        context['all_complaints'] = all_complaints
+        print('MembroGame')
+        print(context['all_complaints'])
+
+
     return render(request, template_name, context)
 
 
@@ -22,6 +59,8 @@ def complaint_add_view(request):
     participacao = Complaint()
     participacao.user = request.user
     user = User.objects.get(id=request.user.id)
+
+    # para inserir o tipo de utilizador (qualidade) no formulário de participação
     qualidade = ''
     print(user.type)
     if user.type == user.Types.EMPLOYEE:
@@ -30,8 +69,6 @@ def complaint_add_view(request):
         qualidade = 'A'
     if user.type == user.Types.TEACHER:
         qualidade = 'P'
-
-    print(qualidade)
 
     if request.method == 'POST':
         form = ComplaintAddFormManual(request.POST, participacao)
