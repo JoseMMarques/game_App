@@ -42,27 +42,40 @@
                     </div>
 
                     <!-- /.card-header -->
-                    <div class="card-body table-responsive p-0" style="height: 300px;">
+                    <div class="card-body table-responsive p-0" >
                         <table class="table table-head-fixed text-nowrap">
                             <thead>
                             <tr>
+                                <th>Id</th>
                                 <th>Turma</th>
-                                <th>Número</th>
-                                <th>Aluno Infrator</th>
-                                <th>Data da ocorrência</th>
-                                <th>Data da participação</th>
+                                <th>DT</th>
+                                <th>Aluno Arguido</th>
+                                <th>Data da <br> ocorrência</th>
+                                <th>Data da <br> participação</th>
                                 <th>Estado</th>
+                                <th></th>
+
                             </tr>
                             </thead>
                             <tbody>
                             {% for complaint in my_complaints %}
                                 <tr>
-                                    <td>{{ complaint.class_number }}</td>
-                                    <td>{{ complaint.class_number }}</td>
-                                    <td>{{ complaint.aluno }}</td>
-                                    <td>{{ complaint.dia }}</td>
-                                    <td>{{ complaint.created }}</td>
-                                    <td>pendente</td>
+                                    <td>{{ complaint.id }}</td>
+                                    <td>{{ complaint.turma }}</td>
+                                    <td>{{ complaint.dt.get_first_name }} {{ complaint.dt.get_last_name }}</td>
+                                    <td>{{ complaint.class_number}} - {{ complaint.aluno }}</td>
+                                    <td>{{ complaint.dia|date:"d/M/Y" }}</td>
+                                    <td>
+                                        {{ complaint.created|date:"d/M/Y" }}
+                                        <br>
+                                        Hora: {{ complaint.created|time:"G:i" }}
+                                    </td>
+                                    <td>{{ complaint.get_estado_display }}</td>
+                                    <td>
+                                        <a href="{{ complaint.get_absolute_url }}">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -78,7 +91,10 @@
                 <div class="col-12">
                 <div class="card card-green">
                     <div class="card-header">
-                        <h3 class="card-title">Participações da minha Direção de Turma &nbsp</h3>
+                        <h3 class="card-title">
+                            Participações da minha Direção de Turma
+                            &nbsp
+                        </h3>
                         <span class="badge bg-gray"> {{ my_dt_complaints.count }} </span>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -88,27 +104,48 @@
                     </div>
 
                     <!-- /.card-header -->
-                    <div class="card-body table-responsive p-0" style="height: 300px;">
+                    <div class="card-body table-responsive p-0">
                         <table class="table table-head-fixed text-nowrap">
                             <thead>
                             <tr>
+                                <th>Id</th>
+                                <th>Denunciante</th>
                                 <th>Turma</th>
-                                <th>Número</th>
-                                <th>Aluno Infrator</th>
-                                <th>Data da ocorrência</th>
-                                <th>Data da participação</th>
+                                <th>Aluno Arguido</th>
+                                <th>Data da <br> ocorrência</th>
+                                <th>Data da <br> participação</th>
                                 <th>Estado</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for complaint in my_dt_complaints %}
                                 <tr>
-                                    <td>{{ complaint.class_number }}</td>
-                                    <td>{{ complaint.class_number }}</td>
-                                    <td>{{ complaint.aluno }}</td>
-                                    <td>{{ complaint.dia }}</td>
-                                    <td>{{ complaint.created }}</td>
-                                    <td>pendente</td>
+                                    <td>{{ complaint.id }}</td>
+                                    <td>
+                                        {{ complaint.user.get_first_name}} {{ complaint.user.get_last_name}}
+                                        <br>
+                                        ({{ complaint.get_qualidade_display }})
+                                    </td>
+                                    <td>{{ complaint.turma }}</td>
+                                    <td>{{ complaint.class_number}} - {{ complaint.aluno }}</td>
+                                    <td>{{ complaint.dia|date:"d/M/Y" }}</td>
+                                    <td>
+                                        {{ complaint.created|date:"d/M/Y" }}
+                                        <br>
+                                        Hora: {{ complaint.created|time:"G:i" }}
+                                    </td>
+                                    <td>{{ complaint.get_estado_display }}</td>
+                                    <td>
+                                        <a href="#">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        &nbsp
+                                        <a href="#">
+                                            <i class="fa fa-pen-alt"></i>
+                                            <i class="fa fa-gavel"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -125,8 +162,8 @@
                 <div class="col-12">
                 <div class="card card-fuchsia">
                     <div class="card-header">
-                        <h3 class="card-title">Todas as participações &nbsp </h3>
-                        <span class="badge bg-gray">  {{ all_complaints.count }}</span>
+                        <h3 class="card-title">Equipa GAME - Todas as participações &nbsp </h3>
+                        <span class="badge bg-gray">{{ all_complaints.count }}</span>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                 <i class="fas fa-minus"></i>
@@ -135,27 +172,53 @@
                     </div>
 
                     <!-- /.card-header -->
-                    <div class="card-body table-responsive p-0" style="height: 300px;">
+                    <div class="card-body table-responsive p-0">
                         <table class="table table-head-fixed text-nowrap">
                             <thead>
                             <tr>
+                                <th>Id</th>
+                                <th>Denunciante</th>
                                 <th>Turma</th>
-                                <th>Número</th>
-                                <th>Aluno Infrator</th>
-                                <th>Data da ocorrência</th>
-                                <th>Data da participação</th>
+                                <th>DT</th>
+                                <th>Aluno Arguido</th>
+                                <th>Data da <br> ocorrência</th>
+                                <th>Data da <br> participação</th>
                                 <th>Estado</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for complaint in all_complaints %}
                                 <tr>
-                                    <td>{{ complaint.class_number }}</td>
-                                    <td>{{ complaint.class_number }}</td>
-                                    <td>{{ complaint.aluno }}</td>
-                                    <td>{{ complaint.dia }}</td>
-                                    <td>{{ complaint.created }}</td>
-                                    <td>pendente</td>
+
+                                    <td>{{ complaint.id }}</td>
+                                    <td>
+                                        {{ complaint.user.get_first_name}} {{ complaint.user.get_last_name}}
+                                        <br>
+                                        ({{ complaint.get_qualidade_display }})
+                                    </td>
+                                    <td>{{ complaint.turma }}</td>
+                                    <td>{{ complaint.dt.get_first_name }} {{ complaint.dt.get_last_name }}</td>
+                                    <td>{{ complaint.class_number}} - {{ complaint.aluno }}</td>
+                                    <td>{{ complaint.dia|date:"d/M/Y" }}</td>
+                                    <td>
+                                        {{ complaint.created|date:"d/M/Y" }}
+                                        <br>
+                                        Hora: {{ complaint.created|time:"G:i" }}
+                                    </td>
+                                    <td>{{ complaint.get_estado_display }}</td>
+                                    <td>
+                                        <a href="#">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa-regular fa-file-pen"></i>
+                                        </a>
+                                        &nbsp
+                                        <a href="#">
+                                            <i class="fa fa-pen-alt"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>

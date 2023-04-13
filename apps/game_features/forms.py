@@ -18,16 +18,9 @@ class ComplaintAddForm(forms.ModelForm):
 
 class ComplaintAddFormManual(forms.ModelForm):
 
-    turma = ModelChoiceField(
-        queryset=SchoolClass.objects.all(),
-        required=True,
-        help_text="Turma",
-        empty_label="turma",
-    )
-
     class Meta:
         model = Complaint
-        exclude = ['user', 'qualidade']
+        exclude = ['user', 'qualidade', 'dt', 'estado', 'slug']
         widgets = {
             'dia': forms.DateInput(
                 format='%Y-%m-%d',
@@ -43,4 +36,3 @@ class ComplaintAddFormManual(forms.ModelForm):
             ),
         }
 
-# TODO: acrescentar Modelo da Participação disciplinar ao Admin

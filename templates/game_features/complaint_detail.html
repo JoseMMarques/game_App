@@ -1,5 +1,6 @@
 {% extends 'game_app_main/base.html' %}
 {% load widget_tweaks %}
+{% load my_tags %}
 {% block content %}
 
     <!-- Content Wrapper. Contains page content -->
@@ -18,7 +19,7 @@
                                     Home
                                 </a>
                             </li>
-                            <li class="breadcrumb-item active">Criar Participação</li>
+                            <li class="breadcrumb-item active">Detalhe Participação</li>
                         </ol>
                     </div>
                 </div>
@@ -35,15 +36,10 @@
 
                         <div class="card card-warning">
                             <div class="card-header">
-                                <h3 class="card-title"> <b>Formulário de participação disciplinar</b></h3>
+                                <h3 class="card-title"> <b>Detalhe da participação disciplinar</b></h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-
-                                <form method="post" id="participacaoForm"
-                                      data-alunos-url="{% url 'game_features:ajax_load_alunos' %}"
-                                      data-numero-aluno-url="{% url 'game_features:ajax_load_numero_aluno' %}" novalidate>
-                                    {% csrf_token %}
 
                                     <h5 class="text-primary"><b>A - Identificação do aluno infrator:</b></h5>
                                     <hr>
@@ -53,55 +49,21 @@
                                             <!-- text input -->
                                             <div class="form-group">
                                                 <label>Turma</label>
-                                                {% render_field form.turma class="form-control" placeholder=field.label %}
+                                                <input type="text"  class="form-control" placeholder="{{complaint.turma}}" disabled>
+
                                             </div>
-
-                                            <!-- Erros neste campo -->
-                                            {% for error in form.turma.errors %}
-                                                <h6 class="text-danger" style="list-style-type: square;">
-                                                    <ul>
-                                                        <li>
-                                                            {{ error }}
-                                                        </li>
-                                                    </ul>
-                                                </h6>
-                                            {% endfor %}
-
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label>Nome</label>
-                                                {% render_field form.aluno class="form-control" placeholder=field.label %}
+                                                <input type="text"  class="form-control" placeholder="{{complaint.aluno}}" disabled>
                                             </div>
-
-                                            <!-- Erros neste campo -->
-                                            {% for error in form.aluno.errors %}
-                                                <h6 class="text-danger" style="list-style-type: square;">
-                                                    <ul>
-                                                        <li>
-                                                            {{ error }}
-                                                        </li>
-                                                    </ul>
-                                                </h6>
-                                            {% endfor %}
-
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label>Número</label>
-                                                {% render_field form.class_number class="form-control" readonly="readonly" %}
+                                                <input type="text"  class="form-control" placeholder="{{complaint.class_number}}" disabled>
                                             </div>
-
-                                            {% for error in form.class_number.errors %}
-                                                <h6 class="text-danger" style="list-style-type: square;">
-                                                    <ul>
-                                                        <li>
-                                                            {{ error }}
-                                                        </li>
-                                                    </ul>
-                                                </h6>
-                                            {% endfor %}
-
                                         </div>
                                     </div>
 
@@ -114,55 +76,21 @@
                                         <div class="col-sm-6">
                                             <!-- text input -->
                                             <div class="form-group">
-                                                <label>{{ form.local.label }}</label>
-                                                {% render_field form.local class="form-control" placeholder=field.label %}
+                                                <label>Local da ocorrência</label>
+                                                <input type="text"  class="form-control" placeholder="{{complaint.local}}" disabled>
                                             </div>
-
-                                            {% for error in form.local.errors %}
-                                                <h6 class="text-danger" style="list-style-type: square;">
-                                                    <ul>
-                                                        <li>
-                                                            {{ error }}
-                                                        </li>
-                                                    </ul>
-                                                </h6>
-                                            {% endfor %}
-
-
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label>{{ form.dia.label }}</label>
-                                                {% render_field form.dia class="form-control" placeholder=field.label %}
+                                                <label>Dia da ocorrência</label>
+                                                <input type="text"  class="form-control" placeholder="{{complaint.dia}}" disabled>
                                             </div>
-
-                                            {% for error in form.dia.errors %}
-                                                <h6 class="text-danger" style="list-style-type: square;">
-                                                    <ul>
-                                                        <li>
-                                                            {{ error }}
-                                                        </li>
-                                                    </ul>
-                                                </h6>
-                                            {% endfor %}
-
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="form-group">
-                                                <label>{{ form.hora.label }}</label>
-                                                {% render_field form.hora type="time" class="form-control" placeholder=field.label %}
+                                                <label>Hora da ocorrência</label>
+                                                <input type="text"  class="form-control" placeholder="{{complaint.hora}}" disabled>
                                             </div>
-
-                                            {% for error in form.hora.errors %}
-                                                <h6 class="text-danger" style="list-style-type: square;">
-                                                    <ul>
-                                                        <li>
-                                                            {{ error }}
-                                                        </li>
-                                                    </ul>
-                                                </h6>
-                                            {% endfor %}
-
                                         </div>
                                     </div>
 
@@ -174,179 +102,146 @@
 
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            {% for field in form %}
 
-                                                {% if field.name == "comer" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {% if complaint.comer %}
+                                                                <span class="fa fa-check-square"></span>
+                                                            {% else %}
+                                                                <span class="fa fa-square"></span>
+                                                            {% endif %}
+                                                            <label class="form-check-label"> {{ complaint_vb.comer }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                                {% if field.name == "levantar" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {% if complaint.levantar %}
+                                                            <span class="fa fa-check-square"></span>
+                                                            {% else %}
+                                                            <span class="fa fa-square"></span>
+                                                            {% endif %}
+                                                            <label class="form-check-label"> {{ complaint_vb.levantar }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                                {% if field.name == "conversar" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {{complaint.conversar}}
+                                                            <label class="form-check-label"> {{ complaint.conversar.label }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                                {% if field.name == "entradar_sair_desordeira" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {{ complaint.entradar_sair_desordeira }}
+                                                            <label class="form-check-label"> {{ complaint.entradar_sair_desordeira.label }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                                {% if field.name == "patrimonio" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {{complaint.patrimonio}}
+                                                            <label class="form-check-label"> {{ complaint.patrimonio.label }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                                {% if field.name == "recolher_imagens" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {{ complaint.recolher_imagens }}
+                                                            <label class="form-check-label"> {{ complaint.recolher_imagens.label }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                                {% if field.name == "fumar" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {{ complaint.fumar}}
+                                                            <label class="form-check-label"> {{ complaint.fumar.label }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                                {% if field.name == "regras_espaços" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {{ complaint.regras_espaços }}
+                                                            <label class="form-check-label"> {{ complaint.regras_espaços.label }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                                {% if field.name == "aparelhos_eletronicos" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {{complaint.aparelhos_eletronicos}}
+                                                            <label class="form-check-label"> {{ complaint.aparelhos_eletronicos.label }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                            {% endfor %}
                                         </div>
                                         <!-- COLUNA 1-->
 
 
                                         <div class="col-sm-6">
-                                            {% for field in form %}
 
-                                                {% if field.name == "linguagem" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {{ complaint.linguagem }}
+                                                            <label class="form-check-label"> {{ complaint.linguagem.label }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                                {% if field.name == "ofender_colegas" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+
+                                                            <label class="form-check-label"> {{ complaint.ofender_colegas.label }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                                {% if field.name == "ameacar" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {{complaint.ameacar}}
+                                                            <label class="form-check-label"> {{ complaint.ameacar.label }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                                {% if field.name == "recusar_trabalhar" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {{complaint.recusar_trabalhar}}
+                                                            <label class="form-check-label"> {{ complaint.recusar_trabalhar.label }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                                {% if field.name == "abandonar_aula" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {{complaint.abandonar_aula}}
+                                                            <label class="form-check-label"> {{ complaint.abandonar_aula.label }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                                {% if field.name == "Ofender_prof_fun" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {{ complaint.Ofender_prof_fun }}
+                                                            <label class="form-check-label"> {{ complaint.Ofender_prof_fun.label }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                                {% if field.name == "roubar" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {{ complaint.roubar }}
+                                                            <label class="form-check-label"> {{ complaint.roubar.label }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                                {% if field.name == "nao_obedecer" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {{ complaint.nao_obedecer }}
+                                                            <label class="form-check-label"> {{ complaint.nao_obedecer.label }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
 
-                                                {% if field.name == "agredir" %}
                                                     <div class="form-group clearfix">
                                                         <div class="icheck-alizarin d-inline">
-                                                            {% render_field field class="list-unstyled d-inline" %}
-                                                            <label class="form-check-label"> {{ field.label }}</label>
+                                                            {{complaint.agredir}}
+                                                            <label class="form-check-label"> {{ complaint.agredir.label }}</label>
                                                         </div>
                                                     </div>
-                                                {% endif %}
-
-                                            {% endfor %}
                                         </div>
 
                                     </div>
@@ -357,8 +252,8 @@
                                         <div class="col-sm-12">
                                             <!-- text input -->
                                             <div class="form-group">
-                                                <label>{{ form.contextualizacao.label }}</label>
-                                                {% render_field form.contextualizacao class="form-control" rows="5" %}
+                                                <label>{{ complaint.contextualizacao.label }}</label>
+
                                             </div>
                                         </div>
                                     </div>
@@ -372,8 +267,8 @@
                                         <div class="col-sm-3">
                                             <!-- text input -->
                                             <div class="form-group">
-                                                <label>{{ form.atividade.label }}</label>
-                                                {% render_field form.atividade class="form-control" placeholder=field.label %}
+                                                <label>{{ complaint.atividade.label }}</label>
+
                                             </div>
                                         </div>
                                     </div>
@@ -384,14 +279,14 @@
                                             <!-- text input -->
                                             <div class="form-group clearfix">
                                                 <div class="icheck-alizarin d-inline">
-                                                    {% render_field form.ordem_saida class="list-unstyled d-inline" %}
-                                                    <label class="form-check-label"> {{ form.ordem_saida.label }}</label>
+
+                                                    <label class="form-check-label"> {{ complaint.ordem_saida.label }}</label>
                                                 </div>
                                             </div>
                                             <div class="form-group clearfix">
                                                 <div class="icheck-alizarin d-inline">
-                                                    {% render_field form.falta class="list-unstyled d-inline" %}
-                                                    <label class="form-check-label"> {{ form.falta.label }}</label>
+
+                                                    <label class="form-check-label"> {{ complaint.falta.label }}</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -400,8 +295,8 @@
                                         <div class="col-sm-12">
                                             <!-- text input -->
                                             <div class="form-group">
-                                                <label>{{ form.tarefa.label }}</label>
-                                                {% render_field form.tarefa class="form-control" rows="2" %}
+                                                <label>{{ complaint.tarefa.label }}</label>
+
                                             </div>
                                         </div>
                                     </div>
@@ -421,19 +316,20 @@
                                                     <!-- text input -->
                                                     <div class="form-group">
                                                         <label>Nome: </label>
-                                                        <input type="text"  class="form-control" placeholder="{{request.user.name}}" disabled>
+                                                        <input type="text"  class="form-control" placeholder="{{complaint.user.name}}" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label>Na qualidade de:</label>
-                                                        <input type="text"  class="form-control" placeholder="{{request.user.get_type}}" disabled>
+                                                        <input type="text"  class="form-control" placeholder="{{complaint.user.get_type}}" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label>Data:</label>
-                                                        <input type="text"  class="form-control" placeholder="{% now 'D d M Y' %}" disabled>
+                                                        <input type="text"  class="form-control" placeholder="{{complaint.created}}" disabled>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -447,19 +343,15 @@
                                     <!-- Botão de submeter e cancelar -->
                                     <div class="row">
                                         <div class="col text-center">
-                                            <button type="submit" id="submeter" class="btn btn-outline-danger">
-                                                <b>submeter formulário de participação disciplinar</b>
-                                            </button>
-                                            &nbsp
-                                            <a href="{% url 'game_features:homepage' %}" id="cancel" class="btn btn-outline-primary">
-                                                <b>Cancelar</b>
+                                            <a href="{% url 'game_features:homepage' %}" id="voltar" class="btn btn-outline-primary">
+                                                <b>voltar</b>
                                             </a>
                                         </div>
                                     </div>
                                     <!-- Fim de Botão de submeter  e cancelar-->
 
 
-                                </form>
+
 
                             </div>
 

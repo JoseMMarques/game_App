@@ -1,5 +1,8 @@
 from django.db import models
+from django.utils.text import slugify
+from django.urls import reverse
 from apps.accounts.models import User, Student, Teacher
+from apps.school_structure.models import SchoolClass
 
 
 class Complaint(models.Model):
@@ -21,6 +24,24 @@ class Complaint(models.Model):
         max_length=100,
         default='P',
     )
+    slug = models.SlugField(
+        max_length=50,
+        unique=True,
+        blank=True,
+        help_text="Deixar em branco para criar um slug automático e único",
+    )
+
+    turma = models.ForeignKey(
+        SchoolClass,
+        related_name='turma',
+        on_delete=models.CASCADE
+    )
+    dt = models.ForeignKey(
+        Teacher,
+        related_name='DT',
+        on_delete=models.CASCADE
+    )
+
     class_number = models.CharField(
         "Número",
         max_length=200,
@@ -142,6 +163,19 @@ class Complaint(models.Model):
         'Encaminhamento com a tarefa:',
         blank=True,
     )
+    ESTADO_CHOICES = (
+        ('ANALISE', 'Em análise'),
+        ('PROCEDIMENTO', 'Procedimento Disciplinar'),
+        ('TERMINADA', 'Terminada'),
+    )
+
+    estado = models.CharField(
+        'Estado',
+        choices=ESTADO_CHOICES,
+        max_length=100,
+        default='ANALISE',
+    )
+
     created = models.DateTimeField(
         'Criado em',
         auto_now_add=True
@@ -156,3 +190,43 @@ class Complaint(models.Model):
     def __str__(self):
         """Return the str.name fom the object"""
         return self.user.name
+
+    def get_absolute_url(self):
+        return reverse(
+            'game_features:complaint_detail',
+            kwargs={'participacao_slug': self.slug}
+        )
+
+    def save(self, *args, **kwargs):
+        """ Set automatic and unique slug from turma, numero e id filed"""
+        super(Complaint, self).save(*args, **kwargs)
+        if not self.slug:
+            self.slug = slugify(self.turma) + str(self.class_number) + "_" + str(self.id)
+            self.save()
+
+# fazer drop nesta tabela
+# https://stackoverflow.com/questions/54256136/how-to-drop-a-table-sqlite3-in-django-2-1
+
+# corrigir erros da tabela --- ver este link -> answered Feb 17, 2020 at 20:49
+# Ashish Gupta
+# https://stackoverflow.com/questions/34548768/no-such-table-exception
+
+# procedimento
+# 1 - abrir o executavel "sqlite3.exe" na pasta do projeto
+# 2 - correr o comando para abrir a base de dados
+#     .open db.sqlite3
+# 3 - ver tabelas
+#     .table
+# 4 - apagar esta tabela
+#     DROP TABLE game_features_complaint;
+# 5 - apagar migrações da app
+# 6 - correr python manage.py makemigrations
+# 7 - Follow this steps to get fixed this issue.
+#
+# python manage.py migrate --fake APPNAME zero
+# This will make your migration to fake. Now you can run the migrate script
+#
+# python manage.py migrate APPNAME
+# OR
+# python manage.py migrate
+# Tables will be created and you solved your problem.. Cheers!!!

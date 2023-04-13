@@ -7,13 +7,13 @@ class ComplaintAdmin(admin.ModelAdmin):
     """ definições do modelo de participação disciplinar no Admin"""
 
     list_display = [
-        'user', 'qualidade', 'aluno', 'ordem_saida', 'falta', 'created',
+        'user', 'qualidade', 'turma', 'class_number', 'aluno', 'created', 'estado',
     ]
     search_fields = [
-        'user', 'qualidade', 'aluno', 'ordem_saida', 'falta', 'created',
+        'user', 'qualidade', 'turma', 'class_number', 'aluno', 'created', 'estado',
     ]
     list_filter = [
-        'user', 'qualidade', 'aluno', 'ordem_saida', 'falta', 'created',
+        'user', 'qualidade', 'turma', 'class_number', 'aluno', 'created', 'estado',
     ]
 
 
