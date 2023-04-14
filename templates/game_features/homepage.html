@@ -70,7 +70,20 @@
                                         <br>
                                         Hora: {{ complaint.created|time:"G:i" }}
                                     </td>
-                                    <td>{{ complaint.get_estado_display }}</td>
+                                    <td>
+                                        <h5>
+                                            <span
+                                                {% if complaint.estado == "ANALISE" %}
+                                                    class="badge badge-pill badge-warning">
+                                                {% elif complaint.estado == "PROCEDIMENTO" %}
+                                                    class="badge badge-pill badge-danger">
+                                                {% else %}
+                                                    class="badge badge-pill badge-success">
+                                                {% endif %}
+                                                {{ complaint.get_estado_display }}
+                                            </span>
+                                        </h5>
+                                    </td>
                                     <td>
                                         <a href="{{ complaint.get_absolute_url }}">
                                             <i class="fa fa-eye"></i>
@@ -135,14 +148,26 @@
                                         <br>
                                         Hora: {{ complaint.created|time:"G:i" }}
                                     </td>
-                                    <td>{{ complaint.get_estado_display }}</td>
                                     <td>
-                                        <a href="#">
+                                        <h5>
+                                            <span
+                                                {% if complaint.estado == "ANALISE" %}
+                                                    class="badge badge-pill badge-warning">
+                                                {% elif complaint.estado == "PROCEDIMENTO" %}
+                                                    class="badge badge-pill badge-danger">
+                                                {% else %}
+                                                    class="badge badge-pill badge-success">
+                                                {% endif %}
+                                                {{ complaint.get_estado_display }}
+                                            </span>
+                                        </h5>
+                                    </td>
+                                    <td>
+                                        <a href="{{ complaint.get_absolute_url }}">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                         &nbsp
                                         <a href="#">
-                                            <i class="fa fa-pen-alt"></i>
                                             <i class="fa fa-gavel"></i>
                                         </a>
                                     </td>
@@ -206,17 +231,27 @@
                                         <br>
                                         Hora: {{ complaint.created|time:"G:i" }}
                                     </td>
-                                    <td>{{ complaint.get_estado_display }}</td>
                                     <td>
-                                        <a href="#">
+                                        <h5>
+                                            <span
+                                                {% if complaint.estado == "ANALISE" %}
+                                                    class="badge badge-pill badge-warning">
+                                                {% elif complaint.estado == "PROCEDIMENTO" %}
+                                                    class="badge badge-pill badge-danger">
+                                                {% else %}
+                                                    class="badge badge-pill badge-success">
+                                                {% endif %}
+                                                {{ complaint.get_estado_display }}
+                                            </span>
+                                        </h5>
+                                    </td>
+                                    <td>
+                                        <a href="{{ complaint.get_absolute_url }}">
                                             <i class="fa fa-eye"></i>
-                                        </a>
-                                        <a href="#">
-                                            <i class="fa-regular fa-file-pen"></i>
                                         </a>
                                         &nbsp
                                         <a href="#">
-                                            <i class="fa fa-pen-alt"></i>
+                                            <i class="fa fa-gavel"></i>
                                         </a>
                                     </td>
                                 </tr>

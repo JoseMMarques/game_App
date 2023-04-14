@@ -75,11 +75,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </ul>
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
+            <!-- user -->
+            <li class="nav-item">
+                <i class="nav-link">
+                   Utilizador:<b> {{request.user.get_first_name}} {{ request.user.get_last_name }}</b>
+                </i>
+            </li>
             <!-- Contact -->
             <li class="nav-item d-none d-sm-inline-block">
-
-                <a href="mailto:game@avalmancil.pt" class="nav-link"> <i class="far fa-envelope"></i>&nbsp
-                    game@avalmancil.pt</a>
+                <a href="mailto:game@avalmancil.pt" class="nav-link">
+                    <i class="far fa-envelope"></i>
+                    &nbsp
+                    game@avalmancil.pt
+                </a>
             </li>
 
             <!-- Settings dropdown -->

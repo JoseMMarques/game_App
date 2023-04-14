@@ -19,7 +19,9 @@
                                     Home
                                 </a>
                             </li>
-                            <li class="breadcrumb-item active">Detalhe Participação</li>
+                            <li class="breadcrumb-item active">
+                                Detalhe Participação
+                            </li>
                         </ol>
                     </div>
                 </div>
@@ -34,321 +36,406 @@
                     <!-- right column -->
                     <div class="col-md-12">
 
-                        <div class="card card-warning">
+                        <div class="card card-gray-dark">
                             <div class="card-header">
                                 <h3 class="card-title"> <b>Detalhe da participação disciplinar</b></h3>
                             </div>
+
                             <!-- /.card-header -->
                             <div class="card-body">
+                                <h3>
+                                    <span
+                                        {% if complaint.estado == "ANALISE" %}
+                                            class="badge badge-pill badge-warning">
+                                        {% elif complaint.estado == "PROCEDIMENTO" %}
+                                            class="badge badge-pill badge-danger">
+                                        {% else %}
+                                            class="badge badge-pill badge-success">
+                                        {% endif %}
+                                        {{ complaint.get_estado_display }}
+                                    </span>
+                                </h3>
+                                <hr>
 
-                                    <h5 class="text-primary"><b>A - Identificação do aluno infrator:</b></h5>
-                                    <hr>
+                                <h5 class="text-primary"><b>A - Identificação do aluno infrator:</b></h5>
+                                <hr>
 
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <!-- text input -->
-                                            <div class="form-group">
-                                                <label>Turma</label>
-                                                <input type="text"  class="form-control" placeholder="{{complaint.turma}}" disabled>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>Turma</label>
+                                            <input type="text"  class="form-control" placeholder="{{complaint.turma}}" disabled>
 
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Nome</label>
+                                            <input type="text"  class="form-control" placeholder="{{complaint.aluno}}" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>Número</label>
+                                            <input type="text"  class="form-control" placeholder="{{complaint.class_number}}" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br>
+                                <br>
+                                <h5 class="text-primary"><b>B - Local, data e hora da ocorrência:</b></h5>
+                                <hr>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>Local da ocorrência</label>
+                                            <input type="text"  class="form-control" placeholder="{{complaint.local}}" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>Dia da ocorrência</label>
+                                            <input type="text"  class="form-control" placeholder="{{complaint.dia}}" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>Hora da ocorrência</label>
+                                            <input type="text"  class="form-control" placeholder="{{complaint.hora}}" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br>
+                                <br>
+                                <h5 class="text-primary"><b>C - Comportamentos incorretos:</b></h5>
+                                <hr>
+
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.comer %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.comer }}</label>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label>Nome</label>
-                                                <input type="text"  class="form-control" placeholder="{{complaint.aluno}}" disabled>
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.levantar %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.levantar }}</label>
                                             </div>
                                         </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label>Número</label>
-                                                <input type="text"  class="form-control" placeholder="{{complaint.class_number}}" disabled>
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.conversar %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.conversar }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.entradar_sair_desordeira %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.entradar_sair_desordeira.label }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.patrimonio %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.patrimonio }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.recolher_imagens %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.recolher_imagens }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.fumar %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.fumar }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.regras_espaços %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.regras_espaços }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.aparelhos_eletronicos %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.aparelhos_eletronicos }}</label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- COLUNA 1-->
+
+
+                                    <div class="col-sm-6">
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.linguagem %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.linguagem }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.ofender_colegas %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.ofender_colegas }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.ameacar %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.ameacar }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.recusar_trabalhar %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.recusar_trabalhar }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.abandonar_aula %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.abandonar_aula }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.Ofender_prof_fun %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.Ofender_prof_fun }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.roubar %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.roubar }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.nao_obedecer %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.nao_obedecer }}</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.agredir %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.agredir }}</label>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <br>
-                                    <br>
-                                    <h5 class="text-primary"><b>B - Local, data e hora da ocorrência:</b></h5>
-                                    <hr>
+                                </div>
+                                <!-- ROW-->
 
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <!-- text input -->
-                                            <div class="form-group">
-                                                <label>Local da ocorrência</label>
-                                                <input type="text"  class="form-control" placeholder="{{complaint.local}}" disabled>
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>{{ complaint.contextualizacao.label }}</label>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br>
+                                <br>
+                                <h5 class="text-primary"><b>D - Informação complementar:</b></h5>
+                                <hr>
+
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>Tipo de atividade</label>
+                                            <input type="text"  class="form-control" placeholder="{{complaint.get_atividade_display}}" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <!-- text input -->
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.ordem_saida %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.ordem_saida }}</label>
+
+                                                <label class="form-check-label"> {{ complaint.ordem_saida.label }}</label>
                                             </div>
                                         </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label>Dia da ocorrência</label>
-                                                <input type="text"  class="form-control" placeholder="{{complaint.dia}}" disabled>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label>Hora da ocorrência</label>
-                                                <input type="text"  class="form-control" placeholder="{{complaint.hora}}" disabled>
+                                        <div class="form-group clearfix">
+                                            <div class="icheck-alizarin d-inline">
+                                                {% if complaint.falta %}
+                                                    <span class="fa fa-check-square"></span>
+                                                {% else %}
+                                                    <span class="fa fa-square"></span>
+                                                {% endif %}
+                                                <label class="form-check-label"> {{ complaint_vb.falta }}</label>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <br>
-                                    <br>
-                                    <h5 class="text-primary"><b>C - Comportamentos incorretos:</b></h5>
-                                    <hr>
-
-
-                                    <div class="row">
-                                        <div class="col-sm-6">
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {% if complaint.comer %}
-                                                                <span class="fa fa-check-square"></span>
-                                                            {% else %}
-                                                                <span class="fa fa-square"></span>
-                                                            {% endif %}
-                                                            <label class="form-check-label"> {{ complaint_vb.comer }}</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {% if complaint.levantar %}
-                                                            <span class="fa fa-check-square"></span>
-                                                            {% else %}
-                                                            <span class="fa fa-square"></span>
-                                                            {% endif %}
-                                                            <label class="form-check-label"> {{ complaint_vb.levantar }}</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {{complaint.conversar}}
-                                                            <label class="form-check-label"> {{ complaint.conversar.label }}</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {{ complaint.entradar_sair_desordeira }}
-                                                            <label class="form-check-label"> {{ complaint.entradar_sair_desordeira.label }}</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {{complaint.patrimonio}}
-                                                            <label class="form-check-label"> {{ complaint.patrimonio.label }}</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {{ complaint.recolher_imagens }}
-                                                            <label class="form-check-label"> {{ complaint.recolher_imagens.label }}</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {{ complaint.fumar}}
-                                                            <label class="form-check-label"> {{ complaint.fumar.label }}</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {{ complaint.regras_espaços }}
-                                                            <label class="form-check-label"> {{ complaint.regras_espaços.label }}</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {{complaint.aparelhos_eletronicos}}
-                                                            <label class="form-check-label"> {{ complaint.aparelhos_eletronicos.label }}</label>
-                                                        </div>
-                                                    </div>
-
-                                        </div>
-                                        <!-- COLUNA 1-->
-
-
-                                        <div class="col-sm-6">
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {{ complaint.linguagem }}
-                                                            <label class="form-check-label"> {{ complaint.linguagem.label }}</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-
-                                                            <label class="form-check-label"> {{ complaint.ofender_colegas.label }}</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {{complaint.ameacar}}
-                                                            <label class="form-check-label"> {{ complaint.ameacar.label }}</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {{complaint.recusar_trabalhar}}
-                                                            <label class="form-check-label"> {{ complaint.recusar_trabalhar.label }}</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {{complaint.abandonar_aula}}
-                                                            <label class="form-check-label"> {{ complaint.abandonar_aula.label }}</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {{ complaint.Ofender_prof_fun }}
-                                                            <label class="form-check-label"> {{ complaint.Ofender_prof_fun.label }}</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {{ complaint.roubar }}
-                                                            <label class="form-check-label"> {{ complaint.roubar.label }}</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {{ complaint.nao_obedecer }}
-                                                            <label class="form-check-label"> {{ complaint.nao_obedecer.label }}</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {{complaint.agredir}}
-                                                            <label class="form-check-label"> {{ complaint.agredir.label }}</label>
-                                                        </div>
-                                                    </div>
-                                        </div>
-
-                                    </div>
-                                    <!-- ROW-->
-
-                                    <br>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <!-- text input -->
-                                            <div class="form-group">
-                                                <label>{{ complaint.contextualizacao.label }}</label>
-
-                                            </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>Encaminhamento com a tarefa:</label>
+                                            <input type="text"  class="form-control" placeholder="{{complaint.tarefa}}" disabled>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <br>
-                                    <br>
-                                    <h5 class="text-primary"><b>D - Informação complementar:</b></h5>
-                                    <hr>
+                                <br>
 
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <!-- text input -->
-                                            <div class="form-group">
-                                                <label>{{ complaint.atividade.label }}</label>
-
-                                            </div>
-                                        </div>
+                                <!-- Autor da Participação -->
+                                <div class="card card-gray-dark">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Participação feita por</h3>
                                     </div>
+                                    <!-- /.card-header -->
+                                    <div class="card-body">
 
-
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <!-- text input -->
-                                            <div class="form-group clearfix">
-                                                <div class="icheck-alizarin d-inline">
-
-                                                    <label class="form-check-label"> {{ complaint.ordem_saida.label }}</label>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <!-- text input -->
+                                                <div class="form-group">
+                                                    <label>Nome: </label>
+                                                    <input type="text"  class="form-control" placeholder="{{complaint.user.name}}" disabled>
                                                 </div>
                                             </div>
-                                            <div class="form-group clearfix">
-                                                <div class="icheck-alizarin d-inline">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label>Na qualidade de:</label>
+                                                    <input type="text"  class="form-control" placeholder="{{complaint.user.get_type}}" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label>Data:</label>
+                                                    <input type="text"  class="form-control" placeholder="{{complaint.created}}" disabled>
 
-                                                    <label class="form-check-label"> {{ complaint.falta.label }}</label>
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <!-- text input -->
-                                            <div class="form-group">
-                                                <label>{{ complaint.tarefa.label }}</label>
+                                </div>
+                                <!-- Fim de Autor da Perticipação -->
+                                <br>
 
-                                            </div>
-                                        </div>
+                                <!-- Botão de voltar -->
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <a href="{% url 'game_features:homepage' %}" id="voltar" class="btn btn-outline-primary">
+                                            <b>voltar</b>
+                                        </a>
                                     </div>
-
-                                    <br>
-
-                                    <!-- Autor da Participação -->
-                                    <div class="card card-success">
-                                        <div class="card-header">
-                                            <h3 class="card-title">Participação feita por</h3>
-                                        </div>
-                                        <!-- /.card-header -->
-                                        <div class="card-body">
-
-                                            <div class="row">
-                                                <div class="col-sm-4">
-                                                    <!-- text input -->
-                                                    <div class="form-group">
-                                                        <label>Nome: </label>
-                                                        <input type="text"  class="form-control" placeholder="{{complaint.user.name}}" disabled>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <label>Na qualidade de:</label>
-                                                        <input type="text"  class="form-control" placeholder="{{complaint.user.get_type}}" disabled>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <label>Data:</label>
-                                                        <input type="text"  class="form-control" placeholder="{{complaint.created}}" disabled>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <!-- Fim de Autor da Perticipação -->
-
-                                    <br>
-
-                                    <!-- Botão de submeter e cancelar -->
-                                    <div class="row">
-                                        <div class="col text-center">
-                                            <a href="{% url 'game_features:homepage' %}" id="voltar" class="btn btn-outline-primary">
-                                                <b>voltar</b>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <!-- Fim de Botão de submeter  e cancelar-->
+                                </div>
+                                <!-- Fim de Botão de voltar-->
 
 
 
