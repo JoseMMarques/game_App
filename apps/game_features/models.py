@@ -112,11 +112,11 @@ class Complaint(models.Model):
         default=False,
     )
     recusar_trabalhar = models.BooleanField(
-        'recusar-se a trabalhar.',
+        'Recusar-se a trabalhar.',
         default=False,
     )
     abandonar_aula = models.BooleanField(
-        'abandonar a aula sem autorização do professor.',
+        'Abandonar a aula sem autorização do professor.',
         default=False,
     )
     Ofender_prof_fun = models.BooleanField(
@@ -142,7 +142,7 @@ class Complaint(models.Model):
 
     # campos de informação complementar
     ATIVIDADE_CHOICES = (
-        ('EM', 'em atividade Letiva'),
+        ('EM', 'em atividade letiva'),
         ('FORA', 'fora de atividade letiva'),
     )
     atividade = models.CharField(

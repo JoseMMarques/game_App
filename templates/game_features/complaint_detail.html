@@ -159,7 +159,7 @@
                                                 {% else %}
                                                     <span class="fa fa-square"></span>
                                                 {% endif %}
-                                                <label class="form-check-label"> {{ complaint_vb.entradar_sair_desordeira.label }}</label>
+                                                <label class="form-check-label"> {{ complaint_vb.entradar_sair_desordeira }}</label>
                                             </div>
                                         </div>
 
@@ -332,8 +332,8 @@
                                     <div class="col-sm-12">
                                         <!-- text input -->
                                         <div class="form-group">
-                                            <label>{{ complaint.contextualizacao.label }}</label>
-
+                                            <label>Breve descrição/contextualização do(s) comportamento(s) incorreto(s):</label>
+                                            <input type="text"  class="form-control" placeholder="{{complaint.contextualizacao }}" disabled>
                                         </div>
                                     </div>
                                 </div>
