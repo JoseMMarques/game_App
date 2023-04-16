@@ -348,3 +348,4 @@ class EmployeeMore(models.Model):
     def __str__(self):
         """Return the str.name fom the object"""
         return self.user.name
+

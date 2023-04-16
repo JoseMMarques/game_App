@@ -6,7 +6,7 @@ from apps.school_structure.models import SchoolClass
 
 
 class Complaint(models.Model):
-    ''' Um modelo para as participações disciplinares '''
+    """ Um modelo para as participações disciplinares """
 
     # identificação
     user = models.ForeignKey(
@@ -168,18 +168,21 @@ class Complaint(models.Model):
         ('PROCEDIMENTO', 'Procedimento Disciplinar'),
         ('TERMINADA', 'Terminada'),
     )
-
     estado = models.CharField(
         'Estado',
         choices=ESTADO_CHOICES,
         max_length=100,
         default='ANALISE',
     )
-
     created = models.DateTimeField(
         'Criado em',
         auto_now_add=True
     )
+
+    #modified = models.DateTimeField(
+     #   'modificado em',
+      #  auto_now=True
+    #)
 
     class Meta:
         """options (metadata) to the field"""
@@ -230,3 +233,71 @@ class Complaint(models.Model):
 # OR
 # python manage.py migrate
 # Tables will be created and you solved your problem.. Cheers!!!
+
+
+class Deliberation(models.Model):
+    """ Um modelo para as ações dos DTs nas participações disciplinares """
+
+    # identificação
+
+    slug = models.SlugField(
+        max_length=50,
+        unique=True,
+        blank=True,
+        help_text="Deixar em branco para criar um slug automático e único",
+    )
+    dt = models.ForeignKey(
+        Teacher,
+        related_name='deliberation_DT',
+        on_delete=models.CASCADE
+    )
+    complaint = models.ForeignKey(
+        Complaint,
+        related_name='participacao',
+        on_delete=models.CASCADE
+    )
+    aluno_ilibado = models.BooleanField(
+        'O aluno foi ilibado.',
+        default=False,
+    )
+    comunicacao_EE = models.BooleanField(
+        'Comunicação ao Encarregado de Educação.',
+        default=False,
+    )
+    enviado_game = models.BooleanField(
+        'Ocorrência enviada para o GAME.',
+        default=False,
+    )
+    procedimento_disciplinar = models.BooleanField(
+        'Ocorrência deu origem a procedimento disciplinar.',
+        default=False,
+    )
+    contextualizacao_dt = models.TextField(
+        'Breve descrição da(s) ações(s) tomadas(s) pelo DT:',
+        blank=True,
+    )
+    created = models.DateTimeField(
+        'Criado em',
+        auto_now_add=True
+    )
+    modified = models.DateTimeField(
+        'modificado em',
+        auto_now=True
+    )
+
+    class Meta:
+        """options (metadata) to the field"""
+        verbose_name = "Ação do DT"
+        verbose_name_plural = "Ações do DT"
+        ordering = ['dt']
+
+    def __str__(self):
+        """Return the str.name fom the object"""
+        return self.dt.name
+
+    def save(self, *args, **kwargs):
+        """ Set automatic and unique slug from turma, numero e id filed"""
+        super(Deliberation, self).save(*args, **kwargs)
+        if not self.slug:
+            self.slug = slugify(self.complaint.slug) + "-" + str(self.id)
+            self.save()

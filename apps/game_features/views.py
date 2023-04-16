@@ -9,7 +9,6 @@ from .forms import ComplaintAddFormManual
 
 @login_required(login_url='/contas/login/')
 def homepage(request):
-
     template_name = 'game_features/homepage.html'
     context = {}
     user = User.objects.get(id=request.user.id)
@@ -183,3 +182,22 @@ def complaint_detail_view(request, participacao_slug):
     }
 
     return render(request, template_name, context)
+
+
+def complaints_aluno_view(request, aluno_id):
+    """ apresenta lista de todas as participações de um aluno """
+
+    aluno = get_object_or_404(Student, id=aluno_id)
+    print(aluno)
+
+    participacoes = Complaint.objects.filter(aluno_id=aluno.id)
+    print(participacoes)
+
+    template_name = 'game_features/complaints_aluno_list.html'
+    context = {
+        'aluno': aluno,
+        'participacoes': participacoes,
+    }
+
+    return render(request, template_name, context)
+

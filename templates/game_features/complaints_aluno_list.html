@@ -224,11 +224,7 @@
                                     </td>
                                     <td>{{ complaint.turma }}</td>
                                     <td>{{ complaint.dt.get_first_name }} {{ complaint.dt.get_last_name }}</td>
-                                    <td>
-                                        <a href="{% url 'game_features:complaints_aluno' complaint.aluno_id %}">
-                                            {{ complaint.class_number}} - {{ complaint.aluno }}
-                                        </a>
-                                    </td>
+                                    <td>{{ complaint.class_number}} - {{ complaint.aluno }}</td>
                                     <td>{{ complaint.dia|date:"d/M/Y" }}</td>
                                     <td>
                                         {{ complaint.created|date:"d/M/Y" }}
