@@ -6,109 +6,97 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container">
-
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Participações Disciplinares</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'game_features:homepage' %}">
+                                    Home
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active">Participações aluno</li>
+                        </ol>
+                    </div>
+                </div>
             </div><!-- /.container-fluid -->
-        </div>
-        <!-- /.content-header -->
+        </section>
 
         <!-- Main content -->
         <div class="content">
-            <a href="{% url 'game_features:complaint_add' %}">
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="info-box shadow">
-                        <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-number">Criar nova participação disciplinar</span>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-indigo">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label>Aluno: </label>
+                                    {{ aluno.name }}
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Turma: </label>
+                                    {{ aluno.studentmore.school_class }}
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Número: </label>
+                                    {{ aluno.studentmore.class_number }}
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>Diretor de Turma: </label>
+                                    {{ aluno.studentmore.school_class.teacher_dt.get_first_name }}
+                                    {{ aluno.studentmore.school_class.teacher_dt.get_last_name }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label>Número Interno: </label>
+                                    {{ aluno.internal_number }}
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Data de nascimento: </label>
+                                    {{ aluno.birth_date }}
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>idade: </label>
+                                    {{ aluno.get_age }}
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Morada: </label>
+                                    {{ aluno.address }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label>Encarregado de Educação: </label>
+                                    {{ aluno.studentmore.name_ee }}
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>email EE: </label>
+                                    {{ aluno.studentmore.email_ee }}
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>Telefone: </label>
+                                    {{ aluno.studentmore.phone_ee }}
+                                </div>
+                            </div>
                         </div>
-                        <!-- /.info-box-content -->
                     </div>
-                    <!-- /.info-box -->
                 </div>
-            </a>
-            {% if my_complaints %}
+            </div>
+
+
+            {% if participacoes %}
                 <div class="row">
                 <div class="col-12">
-                <div class="card card-primary">
+                <div class="card card-indigo">
                     <div class="card-header">
-                        <h3 class="card-title">As minhas participações &nbsp</h3>
-                        <span class="badge bg-gray"> {{ my_complaints.count }} </span>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- /.card-header -->
-                    <div class="card-body table-responsive p-0" >
-                        <table class="table table-head-fixed text-nowrap">
-                            <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Turma</th>
-                                <th>DT</th>
-                                <th>Aluno Arguido</th>
-                                <th>Data da <br> ocorrência</th>
-                                <th>Data da <br> participação</th>
-                                <th>Estado</th>
-                                <th></th>
-
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for complaint in my_complaints %}
-                                <tr>
-                                    <td>{{ complaint.id }}</td>
-                                    <td>{{ complaint.turma }}</td>
-                                    <td>{{ complaint.dt.get_first_name }} {{ complaint.dt.get_last_name }}</td>
-                                    <td>{{ complaint.class_number}} - {{ complaint.aluno }}</td>
-                                    <td>{{ complaint.dia|date:"d/M/Y" }}</td>
-                                    <td>
-                                        {{ complaint.created|date:"d/M/Y" }}
-                                        <br>
-                                        Hora: {{ complaint.created|time:"G:i" }}
-                                    </td>
-                                    <td>
-                                        <h5>
-                                            <span
-                                                {% if complaint.estado == "ANALISE" %}
-                                                    class="badge badge-pill badge-warning">
-                                                {% elif complaint.estado == "PROCEDIMENTO" %}
-                                                    class="badge badge-pill badge-danger">
-                                                {% else %}
-                                                    class="badge badge-pill badge-success">
-                                                {% endif %}
-                                                {{ complaint.get_estado_display }}
-                                            </span>
-                                        </h5>
-                                    </td>
-                                    <td>
-                                        <a href="{{ complaint.get_absolute_url }}">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            {% endif %}
-
-            {% if my_dt_complaints %}
-                <div class="row">
-                <div class="col-12">
-                <div class="card card-green">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            Participações da minha Direção de Turma
-                            &nbsp
-                        </h3>
-                        <span class="badge bg-gray"> {{ my_dt_complaints.count }} </span>
+                        <h3 class="card-title">Todas as participações do {{ aluno.get_first_name }} &nbsp </h3>
+                        <span class="badge bg-gray">{{ participacoes.count }}</span>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                 <i class="fas fa-minus"></i>
@@ -123,8 +111,6 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Denunciante</th>
-                                <th>Turma</th>
-                                <th>Aluno Arguido</th>
                                 <th>Data da <br> ocorrência</th>
                                 <th>Data da <br> participação</th>
                                 <th>Estado</th>
@@ -132,121 +118,37 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for complaint in my_dt_complaints %}
+                            {% for participacao in participacoes %}
                                 <tr>
-                                    <td>{{ complaint.id }}</td>
+
+                                    <td>{{ participacao.id }}</td>
                                     <td>
-                                        {{ complaint.user.get_first_name}} {{ complaint.user.get_last_name}}
+                                        {{ participacao.user.get_first_name}} {{ participacao.user.get_last_name}}
                                         <br>
-                                        ({{ complaint.get_qualidade_display }})
+                                        ({{ participacao.get_qualidade_display }})
                                     </td>
-                                    <td>{{ complaint.turma }}</td>
-                                    <td>{{ complaint.class_number}} - {{ complaint.aluno }}</td>
-                                    <td>{{ complaint.dia|date:"d/M/Y" }}</td>
+                                    <td>{{ participacao.dia|date:"d/M/Y" }}</td>
                                     <td>
-                                        {{ complaint.created|date:"d/M/Y" }}
+                                        {{ participacao.created|date:"d/M/Y" }}
                                         <br>
-                                        Hora: {{ complaint.created|time:"G:i" }}
+                                        Hora: {{ participacao.created|time:"G:i" }}
                                     </td>
                                     <td>
                                         <h5>
                                             <span
-                                                {% if complaint.estado == "ANALISE" %}
+                                                {% if participacao.estado == "ANALISE" %}
                                                     class="badge badge-pill badge-warning">
-                                                {% elif complaint.estado == "PROCEDIMENTO" %}
+                                                {% elif participacao.estado == "PROCEDIMENTO" %}
                                                     class="badge badge-pill badge-danger">
                                                 {% else %}
                                                     class="badge badge-pill badge-success">
                                                 {% endif %}
-                                                {{ complaint.get_estado_display }}
+                                                {{ participacao.get_estado_display }}
                                             </span>
                                         </h5>
                                     </td>
                                     <td>
-                                        <a href="{{ complaint.get_absolute_url }}">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                        &nbsp
-                                        <a href="#">
-                                            <i class="fa fa-gavel"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            {% endif %}
-
-
-            {% if all_complaints %}
-                <div class="row">
-                <div class="col-12">
-                <div class="card card-fuchsia">
-                    <div class="card-header">
-                        <h3 class="card-title">Equipa GAME - Todas as participações &nbsp </h3>
-                        <span class="badge bg-gray">{{ all_complaints.count }}</span>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- /.card-header -->
-                    <div class="card-body table-responsive p-0">
-                        <table class="table table-head-fixed text-nowrap">
-                            <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Denunciante</th>
-                                <th>Turma</th>
-                                <th>DT</th>
-                                <th>Aluno Arguido</th>
-                                <th>Data da <br> ocorrência</th>
-                                <th>Data da <br> participação</th>
-                                <th>Estado</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for complaint in all_complaints %}
-                                <tr>
-
-                                    <td>{{ complaint.id }}</td>
-                                    <td>
-                                        {{ complaint.user.get_first_name}} {{ complaint.user.get_last_name}}
-                                        <br>
-                                        ({{ complaint.get_qualidade_display }})
-                                    </td>
-                                    <td>{{ complaint.turma }}</td>
-                                    <td>{{ complaint.dt.get_first_name }} {{ complaint.dt.get_last_name }}</td>
-                                    <td>{{ complaint.class_number}} - {{ complaint.aluno }}</td>
-                                    <td>{{ complaint.dia|date:"d/M/Y" }}</td>
-                                    <td>
-                                        {{ complaint.created|date:"d/M/Y" }}
-                                        <br>
-                                        Hora: {{ complaint.created|time:"G:i" }}
-                                    </td>
-                                    <td>
-                                        <h5>
-                                            <span
-                                                {% if complaint.estado == "ANALISE" %}
-                                                    class="badge badge-pill badge-warning">
-                                                {% elif complaint.estado == "PROCEDIMENTO" %}
-                                                    class="badge badge-pill badge-danger">
-                                                {% else %}
-                                                    class="badge badge-pill badge-success">
-                                                {% endif %}
-                                                {{ complaint.get_estado_display }}
-                                            </span>
-                                        </h5>
-                                    </td>
-                                    <td>
-                                        <a href="{{ complaint.get_absolute_url }}">
+                                        <a href="{{ participacao.get_absolute_url }}">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                         &nbsp
@@ -266,21 +168,8 @@
                 <!-- /.card -->
             {% endif %}
 
-
-
-
-
           </div>
         </div>
-
-
-
-
-
-
-
-
-
         </div>
         <!-- /.content -->
     </div>

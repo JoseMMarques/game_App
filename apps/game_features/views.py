@@ -188,7 +188,7 @@ def complaints_aluno_view(request, aluno_id):
     """ apresenta lista de todas as participações de um aluno """
 
     aluno = get_object_or_404(Student, id=aluno_id)
-    print(aluno)
+    print(aluno.type)
 
     participacoes = Complaint.objects.filter(aluno_id=aluno.id)
     print(participacoes)
