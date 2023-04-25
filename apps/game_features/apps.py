@@ -4,4 +4,4 @@ from django.apps import AppConfig
 class GameFeaturesConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'apps.game_features'
-    verbose_name = 'Funcionalidades'
+    verbose_name = 'Funcionalidades GAME'

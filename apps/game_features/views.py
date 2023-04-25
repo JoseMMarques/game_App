@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from apps.game_features.models import Complaint
+from apps.game_features.models import Complaint, ParecerDT
 from apps.accounts.models import User, Student, Teacher
-from .forms import ComplaintAddFormManual
+from .forms import ComplaintAddFormManual, ParecerAddForm
 
 
 @login_required(login_url='/contas/login/')
@@ -143,10 +143,25 @@ def load_numero_do_aluno(request):
     )
 
 
+@login_required
 def complaint_detail_view(request, participacao_slug):
     """ apresenta informação detalhada de uma participação """
 
+    user = User.objects.get(id=request.user.id)
     complaint = get_object_or_404(Complaint, slug=participacao_slug)
+
+    # para verificar se a participação tem pareceres do DT
+    try:
+        parecer = ParecerDT.objects.get(complaint=complaint)
+
+    except(ValueError, ParecerDT.DoesNotExist):
+        parecer = None
+
+    # para verificar se o utilizador é o DT da turma
+    if complaint.dt == user:
+        dt_da_turma = True
+    else:
+        dt_da_turma = False
 
     teste = complaint._meta.get_field('comer').verbose_name
     # print(teste)
@@ -179,25 +194,108 @@ def complaint_detail_view(request, participacao_slug):
     context = {
         'complaint': complaint,
         'complaint_vb': complaint_vb,
+        'parecer': parecer,
+        'dt_da_turma': dt_da_turma,
     }
 
     return render(request, template_name, context)
 
 
+@login_required
 def complaints_aluno_view(request, aluno_id):
     """ apresenta lista de todas as participações de um aluno """
 
+    user = User.objects.get(id=request.user.id)
     aluno = get_object_or_404(Student, id=aluno_id)
     print(aluno.type)
 
-    participacoes = Complaint.objects.filter(aluno_id=aluno.id)
-    print(participacoes)
+    complaints_aluno = Complaint.objects.filter(aluno_id=aluno.id)
+    print(complaints_aluno)
+
+    # para verificar se o utilizador é o DT da turma
+    if complaints_aluno.first().dt == user:
+        dt_da_turma = True
+    else:
+        dt_da_turma = False
 
     template_name = 'game_features/complaints_aluno_list.html'
     context = {
         'aluno': aluno,
-        'participacoes': participacoes,
+        'complaints_aluno': complaints_aluno,
+        'dt_da_turma': dt_da_turma,
     }
 
     return render(request, template_name, context)
 
+
+def parecer_dt_add_view(request, complaint_id):
+
+    complaint = get_object_or_404(Complaint, id=complaint_id)
+    parecerDT = ParecerDT()
+
+    # dicionário com o verbose_name dos campos do modelo complaint
+    complaint_vb = {
+        'comer': complaint._meta.get_field('comer').verbose_name,
+        'levantar': complaint._meta.get_field('levantar').verbose_name,
+        'conversar': complaint._meta.get_field('conversar').verbose_name,
+        'entradar_sair_desordeira': complaint._meta.get_field('entradar_sair_desordeira').verbose_name,
+        'patrimonio': complaint._meta.get_field('patrimonio').verbose_name,
+        'recolher_imagens': complaint._meta.get_field('recolher_imagens').verbose_name,
+        'fumar': complaint._meta.get_field('fumar').verbose_name,
+        'regras_espaços': complaint._meta.get_field('regras_espaços').verbose_name,
+        'aparelhos_eletronicos': complaint._meta.get_field('aparelhos_eletronicos').verbose_name,
+        'linguagem': complaint._meta.get_field('linguagem').verbose_name,
+        'ofender_colegas': complaint._meta.get_field('ofender_colegas').verbose_name,
+        'ameacar': complaint._meta.get_field('ameacar').verbose_name,
+        'recusar_trabalhar': complaint._meta.get_field('recusar_trabalhar').verbose_name,
+        'abandonar_aula': complaint._meta.get_field('abandonar_aula').verbose_name,
+        'Ofender_prof_fun': complaint._meta.get_field('Ofender_prof_fun').verbose_name,
+        'roubar': complaint._meta.get_field('roubar').verbose_name,
+        'nao_obedecer': complaint._meta.get_field('nao_obedecer').verbose_name,
+        'agredir': complaint._meta.get_field('agredir').verbose_name,
+        'ordem_saida': complaint._meta.get_field('ordem_saida').verbose_name,
+        'falta': complaint._meta.get_field('falta').verbose_name,
+    }
+
+    if request.method == 'POST':
+        form = ParecerAddForm(request.POST, parecerDT)
+        if form.is_valid():
+            data = form.cleaned_data
+            print(data)
+            parecerDT = form.save(commit=False)
+            parecerDT.dt = complaint.dt
+            parecerDT.complaint = complaint
+            parecerDT.save()
+            if parecerDT.parecer == '1':
+                complaint.estado = 'ARQUIVADA'
+            if parecerDT.parecer == '2':
+                complaint.estado = 'CONCLUIDA'
+            if parecerDT.parecer == '3':
+                complaint.estado = 'PROCEDIMENTO'
+            if parecerDT.parecer == '4':
+                complaint.estado = 'EMD'
+            complaint.parecer_dt = True
+            complaint.save()
+            messages.success(request, f"Ação concluída com sucesso")
+            return redirect('game_features:homepage')
+        else:
+            if form.errors:
+                for error in form.errors:
+                    print(error)
+                messages.error(request, "corrija os erros abaixo indicados")
+            template_name = 'game_features/parecerDT_add.html'
+            context = {
+                'form': form,
+                'complaint': complaint,
+                'complaint_vb': complaint_vb,
+            }
+            return render(request, template_name, context)
+
+    form = ParecerAddForm
+    template_name = 'game_features/parecerDT_add.html'
+    context = {
+        'form': form,
+        'complaint': complaint,
+        'complaint_vb': complaint_vb,
+    }
+    return render(request, template_name, context)

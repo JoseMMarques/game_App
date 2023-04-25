@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Complaint
+from .models import Complaint, ParecerDT
 
 
 class ComplaintAdmin(admin.ModelAdmin):
@@ -18,3 +18,19 @@ class ComplaintAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Complaint, ComplaintAdmin)
+
+class ParecerDTAdmin(admin.ModelAdmin):
+    """ definições do modelo de ParecerDT no Admin"""
+
+    list_display = [
+        'dt', 'complaint', 'parecer', 'created', 'modified',
+    ]
+    search_fields = [
+        'dt', 'complaint', 'parecer', 'created', 'modified',
+    ]
+    list_filter = [
+        'dt', 'complaint', 'parecer', 'created', 'modified',
+    ]
+
+
+admin.site.register(ParecerDT, ParecerDTAdmin)

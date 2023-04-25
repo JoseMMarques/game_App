@@ -165,8 +165,10 @@ class Complaint(models.Model):
     )
     ESTADO_CHOICES = (
         ('ANALISE', 'Em análise'),
-        ('PROCEDIMENTO', 'Procedimento Disciplinar'),
-        ('TERMINADA', 'Terminada'),
+        ('ARQUIVADA', 'Arquivada'),
+        ('CONCLUIDA', 'Participação disciplinar registada'),
+        ('PROCEDIMENTO', 'Procedimento Disciplinar Sumário'),
+        ('EMD', 'Procedimento Disciplinar - EMD'),
     )
     estado = models.CharField(
         'Estado',
@@ -174,15 +176,18 @@ class Complaint(models.Model):
         max_length=100,
         default='ANALISE',
     )
+    parecer_dt = models.BooleanField(
+        'Participação com parecer do DT',
+        default=False,
+    )
     created = models.DateTimeField(
         'Criado em',
         auto_now_add=True
     )
-
-    #modified = models.DateTimeField(
-     #   'modificado em',
-      #  auto_now=True
-    #)
+    modified = models.DateTimeField(
+        'modificado em',
+        auto_now=True
+    )
 
     class Meta:
         """options (metadata) to the field"""
@@ -235,7 +240,7 @@ class Complaint(models.Model):
 # Tables will be created and you solved your problem.. Cheers!!!
 
 
-class Deliberation(models.Model):
+class ParecerDT(models.Model):
     """ Um modelo para as ações dos DTs nas participações disciplinares """
 
     # identificação
@@ -248,7 +253,7 @@ class Deliberation(models.Model):
     )
     dt = models.ForeignKey(
         Teacher,
-        related_name='deliberation_DT',
+        related_name='DiretorTurma',
         on_delete=models.CASCADE
     )
     complaint = models.ForeignKey(
@@ -256,23 +261,30 @@ class Deliberation(models.Model):
         related_name='participacao',
         on_delete=models.CASCADE
     )
-    aluno_ilibado = models.BooleanField(
-        'O aluno foi ilibado.',
+
+    PARECER_CHOICES = (
+        ('1', 'Participação arquivada e sem efeito.'),
+        ('2', 'Ocorrência não frequente e não grave.'),
+        ('3', 'Procedimento disciplinar sumário.'),
+        ('4', 'Procedimento disciplinar sumário - Equipa EMD.'),
+    )
+    parecer = models.CharField(
+        'Parecer do DT',
+        choices=PARECER_CHOICES,
+        max_length=250,
+        default='F',
+    )
+
+    # ações DT
+    advertencia_verbal_aluno = models.BooleanField(
+        'Advertência verbal ao aluno.',
         default=False,
     )
     comunicacao_EE = models.BooleanField(
         'Comunicação ao Encarregado de Educação.',
         default=False,
     )
-    enviado_game = models.BooleanField(
-        'Ocorrência enviada para o GAME.',
-        default=False,
-    )
-    procedimento_disciplinar = models.BooleanField(
-        'Ocorrência deu origem a procedimento disciplinar.',
-        default=False,
-    )
-    contextualizacao_dt = models.TextField(
+    descricao_acao_dt = models.TextField(
         'Breve descrição da(s) ações(s) tomadas(s) pelo DT:',
         blank=True,
     )
@@ -287,9 +299,9 @@ class Deliberation(models.Model):
 
     class Meta:
         """options (metadata) to the field"""
-        verbose_name = "Ação do DT"
-        verbose_name_plural = "Ações do DT"
-        ordering = ['dt']
+        verbose_name = "Parecer do DT"
+        verbose_name_plural = "Pareceres dos DT's"
+        ordering = ['created']
 
     def __str__(self):
         """Return the str.name fom the object"""
@@ -297,7 +309,7 @@ class Deliberation(models.Model):
 
     def save(self, *args, **kwargs):
         """ Set automatic and unique slug from turma, numero e id filed"""
-        super(Deliberation, self).save(*args, **kwargs)
+        super(ParecerDT, self).save(*args, **kwargs)
         if not self.slug:
             self.slug = slugify(self.complaint.slug) + "-" + str(self.id)
             self.save()

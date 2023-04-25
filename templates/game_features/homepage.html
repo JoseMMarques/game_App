@@ -15,8 +15,9 @@
 
         <!-- Main content -->
         <div class="content">
-            <a href="{% url 'game_features:complaint_add' %}">
-                <div class="col-md-3 col-sm-6 col-12">
+
+            <div class="col-md-3 col-sm-6 col-12">
+                <a href="{% url 'game_features:complaint_add' %}">
                     <div class="info-box shadow">
                         <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
                         <div class="info-box-content">
@@ -25,8 +26,9 @@
                         <!-- /.info-box-content -->
                     </div>
                     <!-- /.info-box -->
-                </div>
-            </a>
+                </a>
+            </div>
+
             {% if my_complaints %}
                 <div class="row">
                 <div class="col-12">
@@ -74,11 +76,13 @@
                                         <h5>
                                             <span
                                                 {% if complaint.estado == "ANALISE" %}
-                                                    class="badge badge-pill badge-warning">
-                                                {% elif complaint.estado == "PROCEDIMENTO" %}
-                                                    class="badge badge-pill badge-danger">
-                                                {% else %}
+                                                    class="badge badge-pill badge-info">
+                                                {% elif complaint.estado == "ARQUIVADA" %}
                                                     class="badge badge-pill badge-success">
+                                                {% elif complaint.estado == "CONCLUIDA" %}
+                                                    class="badge badge-pill badge-warning">
+                                                {% else %}
+                                                    class="badge badge-pill badge-danger">
                                                 {% endif %}
                                                 {{ complaint.get_estado_display }}
                                             </span>
@@ -141,7 +145,11 @@
                                         ({{ complaint.get_qualidade_display }})
                                     </td>
                                     <td>{{ complaint.turma }}</td>
-                                    <td>{{ complaint.class_number}} - {{ complaint.aluno }}</td>
+                                    <td>
+                                        <a href="{% url 'game_features:complaints_aluno' complaint.aluno_id %}">
+                                            {{ complaint.class_number}} - {{ complaint.aluno }}
+                                        </a>
+                                    </td>
                                     <td>{{ complaint.dia|date:"d/M/Y" }}</td>
                                     <td>
                                         {{ complaint.created|date:"d/M/Y" }}
@@ -152,11 +160,13 @@
                                         <h5>
                                             <span
                                                 {% if complaint.estado == "ANALISE" %}
-                                                    class="badge badge-pill badge-warning">
-                                                {% elif complaint.estado == "PROCEDIMENTO" %}
-                                                    class="badge badge-pill badge-danger">
-                                                {% else %}
+                                                    class="badge badge-pill badge-info">
+                                                {% elif complaint.estado == "ARQUIVADA" %}
                                                     class="badge badge-pill badge-success">
+                                                {% elif complaint.estado == "CONCLUIDA" %}
+                                                    class="badge badge-pill badge-warning">
+                                                {% else %}
+                                                    class="badge badge-pill badge-danger">
                                                 {% endif %}
                                                 {{ complaint.get_estado_display }}
                                             </span>
@@ -167,9 +177,11 @@
                                             <i class="fa fa-eye"></i>
                                         </a>
                                         &nbsp
-                                        <a href="#">
+                                        {% if not complaint.parecer_dt %}
+                                        <a href="{% url 'game_features:parecer_dt_add' complaint.id %}" >
                                             <i class="fa fa-gavel"></i>
                                         </a>
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -239,11 +251,13 @@
                                         <h5>
                                             <span
                                                 {% if complaint.estado == "ANALISE" %}
-                                                    class="badge badge-pill badge-warning">
-                                                {% elif complaint.estado == "PROCEDIMENTO" %}
-                                                    class="badge badge-pill badge-danger">
-                                                {% else %}
+                                                    class="badge badge-pill badge-info">
+                                                {% elif complaint.estado == "ARQUIVADA" %}
                                                     class="badge badge-pill badge-success">
+                                                {% elif complaint.estado == "CONCLUIDA" %}
+                                                    class="badge badge-pill badge-warning">
+                                                {% else %}
+                                                    class="badge badge-pill badge-danger">
                                                 {% endif %}
                                                 {{ complaint.get_estado_display }}
                                             </span>
@@ -252,10 +266,6 @@
                                     <td>
                                         <a href="{{ complaint.get_absolute_url }}">
                                             <i class="fa fa-eye"></i>
-                                        </a>
-                                        &nbsp
-                                        <a href="#">
-                                            <i class="fa fa-gavel"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -269,22 +279,8 @@
                 </div>
                 <!-- /.card -->
             {% endif %}
-
-
-
-
-
           </div>
         </div>
-
-
-
-
-
-
-
-
-
         </div>
         <!-- /.content -->
     </div>

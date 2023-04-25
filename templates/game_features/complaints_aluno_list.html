@@ -90,13 +90,13 @@
             </div>
 
 
-            {% if participacoes %}
+            {% if complaints_aluno %}
                 <div class="row">
                 <div class="col-12">
                 <div class="card card-indigo">
                     <div class="card-header">
                         <h3 class="card-title">Todas as participações do {{ aluno.get_first_name }} &nbsp </h3>
-                        <span class="badge bg-gray">{{ participacoes.count }}</span>
+                        <span class="badge bg-gray">{{ complaints_aluno.count }}</span>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                 <i class="fas fa-minus"></i>
@@ -118,43 +118,47 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for participacao in participacoes %}
+                            {% for complaint in complaints_aluno %}
                                 <tr>
 
-                                    <td>{{ participacao.id }}</td>
+                                    <td>{{ complaint.id }}</td>
                                     <td>
-                                        {{ participacao.user.get_first_name}} {{ participacao.user.get_last_name}}
+                                        {{ complaint.user.get_first_name}} {{ complaint.user.get_last_name}}
                                         <br>
-                                        ({{ participacao.get_qualidade_display }})
+                                        ({{ complaint.get_qualidade_display }})
                                     </td>
-                                    <td>{{ participacao.dia|date:"d/M/Y" }}</td>
+                                    <td>{{ complaint.dia|date:"d/M/Y" }}</td>
                                     <td>
-                                        {{ participacao.created|date:"d/M/Y" }}
+                                        {{ complaint.created|date:"d/M/Y" }}
                                         <br>
-                                        Hora: {{ participacao.created|time:"G:i" }}
+                                        Hora: {{ complaint.created|time:"G:i" }}
                                     </td>
                                     <td>
                                         <h5>
                                             <span
-                                                {% if participacao.estado == "ANALISE" %}
-                                                    class="badge badge-pill badge-warning">
-                                                {% elif participacao.estado == "PROCEDIMENTO" %}
-                                                    class="badge badge-pill badge-danger">
-                                                {% else %}
+                                                {% if complaint.estado == "ANALISE" %}
+                                                    class="badge badge-pill badge-info">
+                                                {% elif complaint.estado == "ARQUIVADA" %}
                                                     class="badge badge-pill badge-success">
+                                                {% elif complaint.estado == "CONCLUIDA" %}
+                                                    class="badge badge-pill badge-warning">
+                                                {% else %}
+                                                    class="badge badge-pill badge-danger">
                                                 {% endif %}
-                                                {{ participacao.get_estado_display }}
+                                                {{ complaint.get_estado_display }}
                                             </span>
                                         </h5>
                                     </td>
                                     <td>
-                                        <a href="{{ participacao.get_absolute_url }}">
+                                        <a href="{{ complaint.get_absolute_url }}">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                         &nbsp
-                                        <a href="#">
+                                        {% if not complaint.parecer_dt and dt_da_turma %}
+                                        <a href="{% url 'game_features:parecer_dt_add' complaint.id %}" >
                                             <i class="fa fa-gavel"></i>
                                         </a>
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}

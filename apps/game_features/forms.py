@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.models import ModelChoiceField
 
-from .models import Complaint
+from .models import Complaint, ParecerDT
 from apps.school_structure.models import SchoolClass
 
 
@@ -20,7 +20,7 @@ class ComplaintAddFormManual(forms.ModelForm):
 
     class Meta:
         model = Complaint
-        exclude = ['user', 'qualidade', 'dt', 'estado', 'slug']
+        exclude = ['user', 'qualidade', 'dt', 'estado', 'slug', 'parecer_dt']
         widgets = {
             'dia': forms.DateInput(
                 format='%Y-%m-%d',
@@ -36,3 +36,9 @@ class ComplaintAddFormManual(forms.ModelForm):
             ),
         }
 
+
+class ParecerAddForm(forms.ModelForm):
+
+    class Meta:
+        model = ParecerDT
+        exclude = ['dt', 'complaint', 'slug']

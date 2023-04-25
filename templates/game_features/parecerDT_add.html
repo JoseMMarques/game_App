@@ -10,7 +10,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Participação Disciplinar</h1>
+                        <h1>Adicionar Ação à Participação Disciplinar</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -20,7 +20,7 @@
                                 </a>
                             </li>
                             <li class="breadcrumb-item active">
-                                Detalhe Participação
+                                Ação Participação
                             </li>
                         </ol>
                     </div>
@@ -57,6 +57,7 @@
                                     {{ complaint.get_estado_display }}
                                     </span>
                                 </h3>
+
                                 <hr>
 
                                 <h5 class="text-primary"><b>A - Identificação do aluno infrator:</b></h5>
@@ -419,96 +420,87 @@
                                                 <div class="form-group">
                                                     <label>Data:</label>
                                                     <input type="text"  class="form-control" placeholder="{{complaint.created}}" disabled>
+
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                                 <!-- Fim de Autor da Perticipação -->
                                 <br>
 
+                                <!-- AÇAO dt -->
 
-                                <!-- Parecer dt -->
-                                {% if parecer %}
-                                    <div class="card card-cyan">
+                                    <div class="card card-yellow">
                                         <div class="card-header">
-                                            <h3 class="card-title">Ação do DT:</h3>
+                                            <h3 class="card-title">Adicionar ação do DT:</h3>
                                         </div>
                                         <!-- /.card-header -->
                                         <div class="card-body">
 
-                                            <div class="row">
-                                                <div class="col-sm-4">
-                                                    <!-- text input -->
-                                                    <div class="form-group">
-                                                        <label>Diretor de turma: </label>
-                                                        <input type="text"  class="form-control" placeholder="{{parecer.dt}}" disabled>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <label>Parecer:</label>
-                                                        <input type="text"  class="form-control" placeholder="{{parecer.get_parecer_display}}" disabled>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <label>Data:</label>
-                                                        <input type="text"  class="form-control" placeholder="{{parecer.created}}" disabled>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <form method="post" id="parecerForm" novalidate>
+                                                {% csrf_token %}
 
-
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <!-- text input -->
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {% if parecer.advertencia_verbal_aluno %}
-                                                                <span class="fa fa-check-square"></span>
-                                                            {% else %}
-                                                                <span class="fa fa-square"></span>
-                                                            {% endif %}
-                                                            <label class="form-check-label"> Advertência verbal ao aluno.</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group clearfix">
-                                                        <div class="icheck-alizarin d-inline">
-                                                            {% if parecer.comunicacao_EE %}
-                                                                <span class="fa fa-check-square"></span>
-                                                            {% else %}
-                                                                <span class="fa fa-square"></span>
-                                                            {% endif %}
-                                                            <label class="form-check-label">Comunicação ao Encarregado de Educação.</label>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <!-- text input -->
+                                                        <div class="form-group">
+                                                            <label>{{ form.parecer.label }}:</label>
+                                                            {% render_field form.parecer class="form-control" placeholder=field.label %}
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <!-- text input -->
-                                                    <div class="form-group">
-                                                        <label>Breve descrição da(s) ações(s) tomadas(s) pelo DT:</label>
-                                                        <input type="text"  class="form-control" placeholder="{{parecer.descricao_acao_dt}}" disabled>
+
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <!-- text input -->
+                                                        <div class="form-group clearfix">
+                                                            <div class="icheck-alizarin d-inline">
+                                                                {% render_field form.advertencia_verbal_aluno class="list-unstyled d-inline" %}
+                                                                <label class="form-check-label"> {{ form.advertencia_verbal_aluno.label }}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group clearfix">
+                                                            <div class="icheck-alizarin d-inline">
+                                                                {% render_field form.comunicacao_EE class="list-unstyled d-inline" %}
+                                                                <label class="form-check-label"> {{ form.comunicacao_EE.label }}</label>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <!-- text input -->
+                                                        <div class="form-group">
+                                                            <label>{{ form.descricao_acao_dt.label }}</label>
+                                                            {% render_field form.descricao_acao_dt class="form-control" rows="2" %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Botão de submeter e cancelar -->
+                                                <div class="row">
+                                                    <div class="col text-center">
+                                                        <button type="submit" id="submeter" class="btn btn-outline-danger">
+                                                            <b>Guardar</b>
+                                                        </button>
+                                                        &nbsp
+                                                        <a href="{% url 'game_features:homepage' %}" id="cancel" class="btn btn-outline-primary">
+                                                            <b>Cancelar</b>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <!-- Fim de Botão de submeter  e cancelar-->
+
+
+                                            </form>
+
                                         </div>
                                     </div>
-                                    <!-- Fim de Parecer Dt -->
-                                {%  endif %}
+                                    <!-- Fim de AÇÃO Dt -->
                                 <br>
-                                <div class="row">
-                                    <!-- Botão de Voltar e participação disciplinar -->
-                                    <div class="col text-center">
-                                        <a href="{% url 'game_features:homepage' %}" id="voltar" class="btn btn-outline-primary">
-                                            <b>Voltar</b>
-                                        </a>
-                                    </div>
-                                    <!-- Fim de Botão de voltar e PD-->
-                                </div>
-
                             </div>
 
                         </div>
