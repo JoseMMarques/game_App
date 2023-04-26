@@ -1,0 +1,144 @@
+{% extends 'game_app_main/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Participações Disciplinares</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'game_features:homepage' %}">
+                                    Home
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active">Participações turma</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <div class="content">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-indigo">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label>Turma: </label>
+                                    {{ turma.name }}
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>Diretor de Turma: </label>
+                                    {{ turma.teacher_dt.get_first_name }}
+                                    {{ turma.teacher_dt.get_last_name }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            {% if complaints_turma %}
+                <div class="row">
+                <div class="col-12">
+                <div class="card card-indigo">
+                    <div class="card-header">
+                        <h3 class="card-title">Todas as participações da turma {{ turma.name }} &nbsp </h3>
+                        <span class="badge bg-gray">{{ complaints_turma.count }}</span>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-head-fixed text-nowrap">
+                            <thead>
+                            <tr>
+                                <th> Id </th>
+                                <th> Denunciante </th>
+                                <th> Aluno </th>
+                                <th> Data da <br> ocorrência </th>
+                                <th> Data da <br> participação </th>
+                                <th> Estado </th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for complaint in complaints_turma %}
+                                <tr>
+
+                                    <td>{{ complaint.id }}</td>
+                                    <td>
+                                        {{ complaint.user.get_first_name}} {{ complaint.user.get_last_name}}
+                                        <br>
+                                        ({{ complaint.get_qualidade_display }})
+                                    </td>
+                                    <td> {{ complaint.aluno}} </td>
+                                    <td> {{ complaint.dia|date:"d/M/Y" }} </td>
+                                    <td>
+                                        {{ complaint.created|date:"d/M/Y" }}
+                                        <br>
+                                        Hora: {{ complaint.created|time:"G:i" }}
+                                    </td>
+                                    <td>
+                                        <h5>
+                                            <span
+                                                {% if complaint.estado == "ANALISE" %}
+                                                    class="badge badge-pill badge-info">
+                                                {% elif complaint.estado == "ARQUIVADA" %}
+                                                    class="badge badge-pill badge-success">
+                                                {% elif complaint.estado == "CONCLUIDA" %}
+                                                    class="badge badge-pill badge-warning">
+                                                {% else %}
+                                                    class="badge badge-pill badge-danger">
+                                                {% endif %}
+                                                {{ complaint.get_estado_display }}
+                                            </span>
+                                        </h5>
+                                    </td>
+                                    <td>
+                                        <a href="{{ complaint.get_absolute_url }}">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        &nbsp
+                                        {% if not complaint.parecer_dt and dt_da_turma %}
+                                        <a href="{% url 'game_features:parecer_dt_add' complaint.id %}" >
+                                            <i class="fa fa-gavel"></i>
+                                        </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer card-gray-dark clearfix">
+                    </div>
+                </div>
+                <!-- /.card -->
+            {% endif %}
+
+          </div>
+        </div>
+        </div>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+{% endblock %}
+

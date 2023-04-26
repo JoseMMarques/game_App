@@ -234,7 +234,11 @@
                                         <br>
                                         ({{ complaint.get_qualidade_display }})
                                     </td>
-                                    <td>{{ complaint.turma }}</td>
+                                    <td>
+                                        <a href="{% url 'game_features:complaints_turma_list' complaint.turma_id %}">
+                                            {{ complaint.turma }}
+                                        </a>
+                                    </td>
                                     <td>{{ complaint.dt.get_first_name }} {{ complaint.dt.get_last_name }}</td>
                                     <td>
                                         <a href="{% url 'game_features:complaints_aluno' complaint.aluno_id %}">

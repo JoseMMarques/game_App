@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from apps.game_features.models import Complaint, ParecerDT
+from apps.school_structure.models import SchoolClass
 from apps.accounts.models import User, Student, Teacher
 from .forms import ComplaintAddFormManual, ParecerAddForm
 
@@ -228,6 +229,7 @@ def complaints_aluno_view(request, aluno_id):
     return render(request, template_name, context)
 
 
+@login_required
 def parecer_dt_add_view(request, complaint_id):
 
     complaint = get_object_or_404(Complaint, id=complaint_id)
@@ -299,3 +301,30 @@ def parecer_dt_add_view(request, complaint_id):
         'complaint_vb': complaint_vb,
     }
     return render(request, template_name, context)
+
+
+@login_required()
+def complaints_turma_list_view(request, turma_id):
+    """ apresenta lista de todas as participações de uma turma """
+
+    user = User.objects.get(id=request.user.id)
+    turma = get_object_or_404(SchoolClass, id=turma_id)
+
+    complaints_turma = Complaint.objects.filter(turma_id=turma.id)
+    print(complaints_turma)
+
+    # para verificar se o utilizador é o DT da turma
+    if complaints_turma.first().dt == user:
+        dt_da_turma = True
+    else:
+        dt_da_turma = False
+
+    template_name = 'game_features/complaints_turma_list.html'
+    context = {
+        'turma': turma,
+        'complaints_turma': complaints_turma,
+        'dt_da_turma': dt_da_turma,
+    }
+
+    return render(request, template_name, context)
+

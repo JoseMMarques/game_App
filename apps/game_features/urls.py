@@ -10,6 +10,7 @@ urlpatterns = [
     path("participacao/criar/", views.complaint_add_view, name="complaint_add"),
     path("participacao/detalhe/<participacao_slug>", views.complaint_detail_view, name="complaint_detail"),
     path("participacao/detalhe/aluno/<aluno_id>", views.complaints_aluno_view, name="complaints_aluno"),
+    path("participacao/detalhe/turma/<turma_id>", views.complaints_turma_list_view, name="complaints_turma_list"),
     path("participacao/acao/criar/<complaint_id>", views.parecer_dt_add_view, name="parecer_dt_add"),
     path("ajax/load-alunos/", views.load_alunos_da_turma, name="ajax_load_alunos"),
     path("ajax/load-numero-aluno/", views.load_numero_do_aluno, name="ajax_load_numero_aluno"),
